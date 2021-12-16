@@ -3,8 +3,6 @@ import itertools
 from operator import itemgetter
 import math
 
-#hey (;
-
 def setPoints():
   for teamStats in allTeamStats:
     teamStats[1] = random.randrange(50) #input(teamStats[0]+ "'s points: ")
