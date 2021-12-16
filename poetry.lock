@@ -1,0 +1,17 @@
+[[package]]
+name = "git42"
+version = "2021.1.31"
+description = "git init, add, commit and push with one command"
+category = "main"
+optional = false
+python-versions = "*"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.8"
+content-hash = "f95b175341349da9a532e84fc53a28b14292583e7251082ba670ffbdc3abe079"
+
+[metadata.files]
+git42 = [
+    {file = "git42-2021.1.31.tar.gz", hash = "sha256:fbd9a2e6be1dc669e3d9816eaa8b685aaa4e6bb0ddbceffc17790ac629865753"},
+]
