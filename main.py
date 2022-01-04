@@ -29,9 +29,7 @@ print("\n# of players:", players)
 print("Per week step amount:", step)
 print("Per player step amount:", player_step, "\n")
 
-#MAIN --------------------------------------------------------------
-
-def main():
+def getScores():
   for player_ID in range(players):
     print("\nPlayer_ID:", player_ID) #debug
     for week_number in range(weeks): 
@@ -45,6 +43,25 @@ def main():
       print("Comb_ID: " + str(combination_ID) + ",", combinations[combination_ID],"=", score) #debug
   return(playerScores)
 
-playerScores = main()
-print(playerScores)
+def getWinners(): #***** does not do ties yet
+  winners = []
+  for week in playerScores:
+    week.sort(reverse = True)
+    print(week) #debug
+    for i in range(3):
+      winners.append(week[i])
+    winners.append(0)
+  return winners
+
+playerScores = getScores()
+winners = getWinners()
+#print(playerScores) #debug
+print("\n", winners, "\n\n\n")
+for player in winners:
+  if player != 0:
+    print()
+  else:
+    print("")
+
+
 
