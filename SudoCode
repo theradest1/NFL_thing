@@ -1,0 +1,15 @@
+some very sudo code (not really just more of what I want the program to do vaguely)
+key: -- new function, ## just written out
+
+-- create list with all team names and scores (0 as a placeholder)
+
+make it possible to enter scores (right now just randomized)
+
+-- add all combinations to a list ex: [[1,2,3], [1,2,4]...]
+
+## generate a random number for the step (every week it would step a const number so there are no repeats) ex: if the step is 1 w1 == [1,2,3] w2 == [1,2,4]... (just cant be the same amount as the len of teams)
+
+-- make a list of players with their points and the original place in the list (combination starting number) [23.0001, 28.0002, 10.0003 ...] (can't repeat, the number is for the first week, the combination number is multiplied by .0001 so i'll be able to sort the list later to find the winners)
+## sort the list of players
+-- get the top players (with ties)
+output the winner list with points ex: ID: 2374, Points: 28    ID: 2364, points: 28    ID:2369, Points: 26    ID: 2389, Points: 25
