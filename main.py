@@ -11,21 +11,21 @@ players = 400 #the amount of players
 step = 0 #is re-declared lower, is just here to remind me that it is here
 weeks = 18 #the amount of weeks this goes on for (change to 18 when done with dev)
 playerScores = [] # [[234, 26, 234, 567], [235, 235, 235]...]
+
 for i in range(weeks):
-  playerScores.append([])
-  #setting scores for all the teams (will need to be not random later)
+  playerScores.append([]) #setting up the list (not sure how else to do this just let me know if there is a better way)
+
 for teamInfo in allTeamStats:
-  teamInfo[1] = random.randrange(1, 100)
+  teamInfo[1] = random.randrange(1, 100) #setting scores for all the teams (will need to be not random later)
 
-#generate the list of all combinations
-combinations = list(itertools.combinations(range(len(allTeamStats)), 3))
+combinations = list(itertools.combinations(range(len(allTeamStats)), 3)) #generate the list of all combinations
 
-step = int(len(combinations)/weeks)#the amount of combinations skipped for every week (starts from the player's starting number) **this has to be less than combinations/weeks or the player could have multible of the same combinations (even though its basicly impossible)
-player_step = int((len(combinations) - weeks)/players)
+step = int(len(combinations)/weeks) #the amount of combinations skipped for every week (starts from the player's starting number) **this has to be less than combinations/weeks or the player could have multible of the same combinations (even though its basicly impossible)
+player_step = int((len(combinations) - weeks)/players) #same just a step for each player
 
 #debug
 print("Format: [Team_Name, Score] \n", allTeamStats)
-print("\n", len(combinations), "combinations")#"\n", combinations) -- display all combinations (a lot)
+print("\n", len(combinations), "combinations")#"\n", combinations) #display all combinations (a lot)
 print("\n# of players:", players)
 print("Per week step amount:", step)
 print("Per player step amount:", player_step, "\n")
@@ -39,19 +39,19 @@ def getScores():
       if combination_ID >= len(combinations):
         combination_ID -= len(combinations) #if the combination_ID will go over the length of the combination list, it loops back to the beginning
       for team_ID in combinations[combination_ID]:
-        score += allTeamStats[team_ID][1] #combining all the scores of the teams in the combination
+        score += allTeamStats[team_ID][1] #combining all the scores of the teams for that week to compare with others
       playerScores[week_number].append(score + player_ID / 10000) #add the score and the player_ID to a list so we can sort it later to find the winners
       #print("Comb_ID: " + str(combination_ID) + ",", combinations[combination_ID],"=", score) #debug
   return(playerScores)
 
 def getWinners(): #***** does not do ties yet
-  winners = []
+  winners = [] #declare var
   for week in playerScores:
-    week.sort(reverse = True)
+    week.sort(reverse = True) #sort the points in decending order
     #print(week) #debug
-    winners.append(0)
+    winners.append(0) #a spacer so i can see the end of the week (and im too lazy to make a array of lists)
     for i in range(3):
-      winners.append(week[i])
+      winners.append(week[i]) #adds the top 3 scores to a list (with 0s to seperate the weeks)
   return winners
 
 playerScores = getScores()
@@ -64,5 +64,5 @@ for player in winners:
     print(int(round(math.modf(player)[0] * 10000,0))) #display the winner's ID
   else:
     week += 1
-    print("\nWeek", week, "winners:")
+    print("\nWeek", week, "winners:") #some ease of life stuffs
     
