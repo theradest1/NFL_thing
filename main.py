@@ -25,9 +25,12 @@ combinations = list(itertools.combinations(range(len(allTeamStats)), 3)) #genera
 step = int(len(combinations)/weeks) #the amount of combinations skipped for every week (starts from the player's starting number) **this has to be less than combinations/weeks or the player could have multible of the same combinations (even though its basicly impossible)
 estimated_players = int(input("Estimated amount of players:\n>> "))
 player_step = int(len(combinations)/estimated_players) #same just a step for each player
-estimated_players = int(len(combinations)/player_step)
-print("estimated players udjusted to", estimated_players, "to fit better")
-input("(press enter)")
+#estimated_players = int(len(combinations)/player_step)
+print("Do you want the estimated players to be adjusted to", int(len(combinations)/player_step), "to fit better")
+
+if input("(y/n)") == "y":
+  estimated_players = int(len(combinations)/player_step)
+print(estimated_players)
 
 #print(len(combinations), "/", 
 
