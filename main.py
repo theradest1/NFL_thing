@@ -9,6 +9,47 @@ allTeamStats = [["Arizona Cardinals", 0],["Atlanta Falcons", 0],["Baltimore Rave
 
 shortNames = ["ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", "DAL", "DEN", "DET", " GB", "HOU", "IND", "JAX", " KC", "MIA", "MIN", " NE", " NO", "NYG", "NYJ", " LV", "PHI", "PIT", "LAC", " SF", "SEA", "LAR", " TB", "TEN", "WAS"] 
 
+commands = ["lookup_player", "lookup_team", "set_points", "weekly_winners", "test_print", "print_tickets", "points", "set_random_points"]
+
+#commands not done
+def lookup_player():
+  print()
+def lookup_team():
+  print()
+def weekly_winners():
+  print()
+def test_print():
+  print()
+def print_tickets():
+  print()
+  
+#commands being worked on
+def set_random_points():
+  for team in allTeamStats:
+    team[1] = random.randrange(0, 100)
+  print("done")
+#commands that are done
+def set_scores():
+  for team in allTeamStats:
+    team[1] = int(input(team[0] + "'s Score: "))
+def points():
+  for team in allTeamStats:
+    print(str("{}: {}").format(team[0], team[1]))
+
+#end of commands -------------------
+
+inp = ""
+while inp != "done":
+  if len(inp.split()) > 0:
+    cmd = inp.split()[0]
+    if cmd in commands:
+      eval(cmd)()
+    elif cmd == "exit":
+      exit()
+    else:
+      print(str("'{}' is not a command").format(cmd))
+  inp = input(">>")
+
 players = 0 #counts up (simulating another person getting a ticket)
 step = 0 #is re-declared lower, its just here to remind me that it is here
 weeks = 17 #the amount of weeks this goes on for (change to 17 when done with dev)
