@@ -7,6 +7,7 @@ authors = ["bacon (Landon Bakken)"]
 [tool.poetry.dependencies]
 python = "^3.8"
 git42 = "^2021.1.31"
+fpdf = "^1.7.2"
 
 [tool.poetry.dev-dependencies]
 

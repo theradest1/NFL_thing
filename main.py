@@ -2,6 +2,7 @@ import random
 import itertools
 from operator import itemgetter
 import math
+from fpdf import FPDF
 
 #SETUP -------------------------------------------------------------
 #[[name, score], [name, score]]
@@ -11,24 +12,39 @@ shortNames = ["ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", "DAL", "DE
 
 commands = ["lookup_player", "lookup_team", "set_points", "weekly_winners", "test_print", "print_tickets", "points", "set_random_points"]
 
+combinations = list(itertools.combinations(range(len(allTeamStats)), 3)) #generate the list of all combinations
+
 #commands not done
-def lookup_player():
-  print()
-def lookup_team():
-  print()
 def weekly_winners():
-  print()
-def test_print():
   print()
 def print_tickets():
   print()
   
 #commands being worked on
+def test_print():
+  pdf = FPDF()
+  pdf.add_page()
+  pdf.set_font('Arial', 'B', 16)
+  pdf.cell(40, 10, str(random.randrange(0, 69)) + "Hey (;")
+  pdf.output('tuto1.pdf', 'F')
+  print("PDF created")
+def lookup_player():
+  player_ID = int(input("Player ID: "))
+  player_step = 1 # change if less than 4.9k players       len(combinations) / int(input("players: "))
+  week_step = int(len(combinations)/int(input("weeks: ")))
+  for week in range(0, 17):
+    print("Week", week)
+    for team in combinations[player_ID*player_step + week * week_step]:
+      print(team)
+    print()
+def lookup_team():
+  print()
+  
+#commands that are done
 def set_random_points():
   for team in allTeamStats:
     team[1] = random.randrange(0, 100)
   print("done")
-#commands that are done
 def set_scores():
   for team in allTeamStats:
     team[1] = int(input(team[0] + "'s Score: "))
@@ -60,8 +76,6 @@ for i in range(weeks):
 
 for teamInfo in allTeamStats:
   teamInfo[1] = random.randrange(1, 100) #setting scores for all the teams (will need to be not random later)
-
-combinations = list(itertools.combinations(range(len(allTeamStats)), 3)) #generate the list of all combinations
 
 step = int(len(combinations)/weeks) #the amount of combinations skipped for every week (starts from the player's starting number) **this has to be less than combinations/weeks or the player could have multible of the same combinations (even though its basicly impossible)
 estimated_players = int(input("Estimated amount of players:\n>> "))
