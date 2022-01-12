@@ -6,6 +6,7 @@ import PyPDF2
 from fpdf import FPDF
 
 square = "Square.png"
+template = "test.pdf"
 
 #SETUP -------------------------------------------------------------
 #[[name, score], [name, score]]
@@ -13,7 +14,7 @@ allTeamStats = [["Arizona Cardinals", 0],["Atlanta Falcons", 0],["Baltimore Rave
 
 shortNames = ["ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", "DAL", "DEN", "DET", " GB", "HOU", "IND", "JAX", " KC", "MIA", "MIN", " NE", " NO", "NYG", "NYJ", " LV", "PHI", "PIT", "LAC", " SF", "SEA", "LAR", " TB", "TEN", "WAS"] 
 
-commands = ["lookup_player", "set_points", "weekly_winners", "test_print", "print_tickets", "points", "set_random_points"]
+commands = ["lookup_player", "set_points", "weekly_winners", "test_pdf", "test_print", "print_tickets", "points", "set_random_points"]
 
 combinations = list(itertools.combinations(range(len(allTeamStats)), 3)) #generate the list of all combinations
 
@@ -22,14 +23,16 @@ def weekly_winners():
   print()
 def print_tickets():
   print()
+def test_print():
+  print()
   
 #commands being worked on
-def test_print():
+def test_pdf():
   pdf = FPDF()
   pdf.add_page()
   pdf.set_font('Arial', 'B', 16)
-  pdf.cell(40, 10, str(random.randrange(0, 69)) + "Hi (:")
-  pdf.image(square, x=50, y=100, w=0, h=0)
+  pdf.cell(0, 0, str(random.randrange(0, 69)) + "Hi (:")
+  pdf.rect(5, 5, 200, 100, "D")
   pdf.output('tuto1.pdf', 'F')
   print("PDF created")
 
@@ -55,6 +58,8 @@ def points():
     print(str("{}: {}").format(team[0], team[1]))
 
 #end of commands -------------------
+
+test_pdf()
 
 inp = ""
 while inp != "done":
