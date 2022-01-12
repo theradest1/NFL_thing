@@ -2,7 +2,10 @@ import random
 import itertools
 from operator import itemgetter
 import math
+import PyPDF2
 from fpdf import FPDF
+
+square = "Square.png"
 
 #SETUP -------------------------------------------------------------
 #[[name, score], [name, score]]
@@ -10,7 +13,7 @@ allTeamStats = [["Arizona Cardinals", 0],["Atlanta Falcons", 0],["Baltimore Rave
 
 shortNames = ["ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", "DAL", "DEN", "DET", " GB", "HOU", "IND", "JAX", " KC", "MIA", "MIN", " NE", " NO", "NYG", "NYJ", " LV", "PHI", "PIT", "LAC", " SF", "SEA", "LAR", " TB", "TEN", "WAS"] 
 
-commands = ["lookup_player", "lookup_team", "set_points", "weekly_winners", "test_print", "print_tickets", "points", "set_random_points"]
+commands = ["lookup_player", "set_points", "weekly_winners", "test_print", "print_tickets", "points", "set_random_points"]
 
 combinations = list(itertools.combinations(range(len(allTeamStats)), 3)) #generate the list of all combinations
 
@@ -25,9 +28,12 @@ def test_print():
   pdf = FPDF()
   pdf.add_page()
   pdf.set_font('Arial', 'B', 16)
-  pdf.cell(40, 10, str(random.randrange(0, 69)) + "Hey (;")
+  pdf.cell(40, 10, str(random.randrange(0, 69)) + "Hi (:")
+  pdf.image(square, x=50, y=100, w=0, h=0)
   pdf.output('tuto1.pdf', 'F')
   print("PDF created")
+
+#commands that are done
 def lookup_player():
   player_ID = int(input("Player ID: "))
   player_step = 1 # change if less than 4.9k players       len(combinations) / int(input("players: "))
@@ -37,10 +43,6 @@ def lookup_player():
     for team in combinations[player_ID*player_step + week * week_step]:
       print(team)
     print()
-def lookup_team():
-  print()
-  
-#commands that are done
 def set_random_points():
   for team in allTeamStats:
     team[1] = random.randrange(0, 100)
