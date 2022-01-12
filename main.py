@@ -26,14 +26,20 @@ def print_tickets():
 def test_print():
   print()
   
+def base_ticket(pdf):
+  pdf.add_page()
+  pdf.set_font('Arial', 'B', 10)
+  pdf.cell(0, 0, "Rules: ")
+  #pdf.cell(w, h = 0, txt = '', border = 0, ln = 0, align = '', fill = False, link = '')
+  #pdf.cell(20, 10, 'Title', 1, 1, 'C')
+  pdf.cell(10, 10, "1. Each ticket is valid for the 17 weeks of the regular season", 1, 0, 'R')
+  pdf.rect(5, 5, 200, 100, "D")
+  pdf.output('tuto1.pdf', 'F')
+
 #commands being worked on
 def test_pdf():
   pdf = FPDF()
-  pdf.add_page()
-  pdf.set_font('Arial', 'B', 16)
-  pdf.cell(0, 0, str(random.randrange(0, 69)) + "Hi (:")
-  pdf.rect(5, 5, 200, 100, "D")
-  pdf.output('tuto1.pdf', 'F')
+  base_ticket(pdf)
   print("PDF created")
 
 #commands that are done
