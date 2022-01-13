@@ -24,10 +24,10 @@ def print_tickets():
 def test_print():
   print()
 
-def base_ticket(pdf):
+def base_ticket(pdf, ID):
   pdf.add_page()
-  pdf.set_fill_color(255, 255, 255)
-  pdf.rect(0, 0, 200, 1000, "FD")
+  #pdf.set_fill_color(255, 255, 255)
+  #pdf.rect(0, 0, 200, 1000, "FD")
   #pdf.image(square, 10, 10, 0, 0, 'PNG')# - how to add an image
   pdf.set_font('Arial', 'B', 13)
   pdf.cell(0, 20, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 0, 2, "C", False, "")
@@ -40,15 +40,17 @@ def base_ticket(pdf):
   pdf.set_font('Arial', '', 7)
   pdf.multi_cell(0, 4, "\n1. This ticket is valid for the 17 \nweeks of the regular season.\n2. Each ticket has three teams/week and the\nscores added together determine the winners\n3. In case of ties, prizes are combined and\nsplit wetween the ties.\n4. No other ticket hs the same team combination\nfor each week as this ticket.\n5. Teams not playing on a given week will\nbe assigned the previous week's score.", 0, 'L', False)
   pdf.rect(5, 5, 200, 100, "D")
+  pdf.cell(0, 0, str(ID))
   pdf.output('tuto1.pdf', 'F')
 
 #commands being worked on
 def test_pdf():
   pdf = FPDF()
-  for ii in range(245):
+  pdf.set_auto_page_break(0)
+  for ii in range(1):
     for i in range(0, 20):
-      base_ticket(pdf)
-      print("ticket pdf made, ticket ID:", i + 1 + ii * 20 + 1, )
+      base_ticket(pdf, i + ii * 20)
+      print("ticket pdf made, ticket ID:", i + ii * 20)
     print("ticket chunks:", ii + 1)
   print("Done")
 
@@ -165,4 +167,3 @@ for player in winners:
     print("\nWeek", week, "winners:") #some ease of life stuffs
 
 #print(playerScores) debug
-    
