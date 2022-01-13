@@ -14,18 +14,10 @@ category = "main"
 optional = false
 python-versions = "*"
 
-[[package]]
-name = "pypdf2"
-version = "1.26.0"
-description = "PDF toolkit"
-category = "main"
-optional = false
-python-versions = "*"
-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ea9a7b2b24a95b9512236432a65622261a6cc62e1558daf24a9ec1c61f267542"
+content-hash = "a772181e24a0db039be55b6223739601f05344adb5b80648788d92aff140d60e"
 
 [metadata.files]
 fpdf = [
@@ -35,7 +27,4 @@ fpdf = [
 ]
 git42 = [
     {file = "git42-2021.1.31.tar.gz", hash = "sha256:fbd9a2e6be1dc669e3d9816eaa8b685aaa4e6bb0ddbceffc17790ac629865753"},
-]
-pypdf2 = [
-    {file = "PyPDF2-1.26.0.tar.gz", hash = "sha256:e28f902f2f0a1603ea95ebe21dff311ef09be3d0f0ef29a3e44a932729564385"},
 ]

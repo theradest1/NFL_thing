@@ -30,7 +30,7 @@ def base_ticket(pdf):
   pdf.rect(0, 0, 200, 1000, "FD")
   #pdf.image(square, 10, 10, 0, 0, 'PNG')# - how to add an image
   pdf.set_font('Arial', 'B', 13)
-  pdf.cell(0, 20, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks")
+  pdf.cell(0, 20, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 0, 2, "C", False, "")
   
   pdf.multi_cell(0, 4, "")
 
@@ -45,9 +45,11 @@ def base_ticket(pdf):
 #commands being worked on
 def test_pdf():
   pdf = FPDF()
-  for i in range(0, 25):
-    base_ticket(pdf)
-    print("PDF created:", i)
+  for ii in range(245):
+    for i in range(0, 20):
+      base_ticket(pdf)
+      print("ticket pdf made, ticket ID:", i + 1 + ii * 20 + 1, )
+    print("ticket chunks:", ii + 1)
   print("Done")
 
 #commands that are done
