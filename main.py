@@ -45,8 +45,8 @@ def test_pdf():
   pdf = FPDF()
   pdf.set_auto_page_break(0)
   for i in range(0, pdfs):
-    base_ticket(pdf, i + ii * 20)
-    print("ticket pdf made, ticket ID:", i + ii * 20)
+    base_ticket(pdf, i)
+    print("ticket pdf made, ticket ID:", i)
   pdf.output('tuto1.pdf', 'F')
   print("Done")
 
