@@ -5,6 +5,8 @@ import math
 from fpdf import FPDF
 import os
 
+#hey from vscode (:
+
 square = "Square.png"
 football = "Football.png"
 
@@ -123,9 +125,11 @@ print("Format: [Team_Name, Score] \n", allTeamStats)
 print("\n" + str(len(combinations)), "combinations")#"\n", combinations) #display all combinations (a lot)
 #print("# of players:", players) #not an exact amount so I removed it
 print("Per week step amount:", step)
-print("Per player step amount:", player_step, "\n")
+print("Per player step amount:", 1, "\n")
 
 def getScores():
+  estimated_players = len(combinations)
+  player_step = 1
   #player_step = int((len(combinations) - step)/(int(input("Estimated amount of players:\n>> ")) * 3))
   command = ""
   player_ID = 0
