@@ -5,8 +5,6 @@ import math
 from fpdf import FPDF
 import os
 
-#hey from vscode (:
-
 square = "Square.png"
 football = "Football.png"
 
