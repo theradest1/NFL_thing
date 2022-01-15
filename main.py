@@ -3,6 +3,7 @@ import itertools
 from operator import itemgetter
 import math
 from fpdf import FPDF
+import os
 
 square = "Square.png"
 football = "Football.png"
@@ -13,7 +14,7 @@ allTeamStats = [["Arizona Cardinals", 0],["Atlanta Falcons", 0],["Baltimore Rave
 
 shortNames = ["ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", "DAL", "DEN", "DET", " GB", "HOU", "IND", "JAX", " KC", "MIA", "MIN", " NE", " NO", "NYG", "NYJ", " LV", "PHI", "PIT", "LAC", " SF", "SEA", "LAR", " TB", "TEN", "WAS"] 
 
-commands = ["lookup_player", "set_points", "weekly_winners", "test_pdf", "test_print", "print_tickets", "points", "set_random_points"]
+commands = ["lookup_player", "set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "set_random_points", "help"]
 
 combinations = list(itertools.combinations(range(len(allTeamStats)), 3)) #generate the list of all combinations
 
@@ -22,39 +23,40 @@ def weekly_winners():
   print()
 def print_tickets():
   print()
-def test_print():
-  print()
-
-def base_ticket(pdf, ID):
-  pdf.add_page()
-  pdf.set_fill_color(255, 255, 255)
-  pdf.rect(0, 0, 200, 1000, "FD")
-  pdf.image(football, 50, 30, 0, 0, 'PNG')# - how to add an image
-  pdf.set_font('Arial', 'B', 13)
-  pdf.cell(0, 20, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 0, 2, "C", False, "")
-  pdf.set_font('Arial', 'B', 9)
-  pdf.cell(0, 0, "Rules:", 0, 2, "l", False, "")
-  pdf.set_font('Arial', '', 7)
-  pdf.multi_cell(0, 4, "\n1. This ticket is valid for the 17 \nweeks of the regular season.\n2. Each ticket has three teams/week and the\nscores added together determine the winners\n3. In case of ties, prizes are combined and\nsplit wetween the ties.\n4. No other ticket hs the same team combination\nfor each week as this ticket.\n5. Teams not playing on a given week will\nbe assigned the previous week's score.", 0, 'L', False)
-  pdf.rect(5, 5, 200, 100, "D")
-  pdf.cell(0, 0, str(ID))
 
 #commands being worked on
 def test_pdf():
+  if os.path.isfile("tickets.pdf"):
+    print("Deleting past pdf...")
+    os.remove("tickets.pdf")
+    print("Done")
+  
   pdfs = int(input("How many (all in one pdf): "))
   pdf = FPDF()
   pdf.set_auto_page_break(0)
   for i in range(0, pdfs):
     base_ticket(pdf, i)
     print("ticket pdf made, ticket ID:", i)
-  pdf.output('tuto1.pdf', 'F')
+  print("Exporting...")
+  pdf.output('tickets.pdf', 'F')
   print("Done")
 
+
+
+
+  
 #commands that are done
+def help():
+  print("Commands: ", end = "")
+  for command in commands:
+    print(command, end = "")
+    if command != commands[-1]:
+      print(", ", end = "")
+  print()
 def lookup_player():
   player_ID = int(input("Player ID: "))
   player_step = 1 # change if less than 4.9k players       len(combinations) / int(input("players: "))
-  week_step = int(len(combinations)/int(input("weeks: ")))
+  week_step = int(len(combinations)/17)
   for week in range(0, 17):
     print("Week", week)
     for team in combinations[player_ID*player_step + week * week_step]:
@@ -67,13 +69,29 @@ def set_random_points():
 def set_scores():
   for team in allTeamStats:
     team[1] = int(input(team[0] + "'s Score: "))
-def points():
+def display_points():
   for team in allTeamStats:
     print(str("{}: {}").format(team[0], team[1]))
 
+
 #end of commands -------------------
 
-test_pdf()
+
+
+
+def base_ticket(pdf, ID):
+  pdf.add_page()
+  pdf.set_fill_color(255, 255, 255)
+  pdf.rect(0, 0, 300, 1000, "FD")
+  pdf.image(football, 50, 30, 0, 0, 'PNG')# - how to add an image
+  pdf.set_font('Arial', 'B', 13)
+  pdf.cell(0, 20, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 0, 2, "C", False, "")
+  pdf.set_font('Arial', 'B', 9)
+  pdf.cell(0, 0, "Rules:", 0, 2, "l", False, "")
+  pdf.set_font('Arial', '', 7)
+  pdf.multi_cell(0, 4, "\n1. This ticket is valid for the 17 \nweeks of the regular season.\n2. Each ticket has three teams/week and the\nscores added together determine the winners\n3. In case of ties, prizes are combined and\nsplit wetween the ties.\n4. No other ticket hs the same team combination\nfor each week as this ticket.\n5. Teams not playing on a given week will\nbe assigned the previous week's score.", 0, 'L', False)
+  pdf.rect(5, 5, 200, 100, "D")
+  pdf.cell(0, 0, str(ID))
 
 inp = ""
 while inp != "done":
@@ -98,17 +116,7 @@ for i in range(weeks):
 for teamInfo in allTeamStats:
   teamInfo[1] = random.randrange(1, 100) #setting scores for all the teams (will need to be not random later)
 
-step = int(len(combinations)/weeks) #the amount of combinations skipped for every week (starts from the player's starting number) **this has to be less than combinations/weeks or the player could have multible of the same combinations (even though its basicly impossible)
-estimated_players = int(input("Estimated amount of players:\n>> "))
-player_step = int(len(combinations)/estimated_players) #same just a step for each player
-#estimated_players = int(len(combinations)/player_step)
-print("Do you want the estimated players to be adjusted to", int(len(combinations)/player_step), "to fit better")
-
-if input("(y/n)") == "y":
-  estimated_players = int(len(combinations)/player_step)
-print(estimated_players)
-
-#print(len(combinations), "/", 
+week_step = int(len(combinations)/17)
 
 #debug
 print("Format: [Team_Name, Score] \n", allTeamStats)
