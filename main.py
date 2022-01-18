@@ -171,5 +171,3 @@ for player in winners:
   else:
     week += 1
     print("\nWeek", week, "winners:") #some ease of life stuffs
-
-#print(playerScores) debug
