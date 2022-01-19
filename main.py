@@ -8,44 +8,54 @@ import os
 square = "Square.png"
 football = "Football.png"
 
+total_players = 4960
+weeks = 17
+
 #SETUP -------------------------------------------------------------
 #[[name, score], [name, score]]
 allTeamStats = [["Arizona Cardinals", 0],["Atlanta Falcons", 0],["Baltimore Ravens", 0], ["Buffalo Bills", 0],["Carolina Panthers", 0],["Chicago Bears", 0],["Cincinnati Bengals", 0],["Cleveland Browns", 0],["Dallas Cowboys", 0],["Denver Broncos", 0],["Detroit Lions", 0],["Green Bay Packers", 0],["Houston Texans", 0],["Indianapolis Colts", 0],["Jacksonville Jaguars", 0],["Kansas City Chiefs", 0],["Las Vegas Raiders", 0],["Los Angeles Chargers", 0],["Los Angeles Rams", 0],["Miami Dolphins", 0],["Minnesota Vikings", 0],["New England Patriots", 0],["New Orleans Saints", 0],["New York Giants", 0],["New York Jets", 0],["Philadelphia Eagles", 0],["Pittsburgh Steelers", 0],["San Francisco 49ers", 0],["Seattle Seahawks", 0],["Tampa Bay Buccaneers", 0],["Tennessee Titans", 0],["Washington Football Team", 0]]
 
+abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y', 'X', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
+
 shortNames = ["ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", "DAL", "DEN", "DET", " GB", "HOU", "IND", "JAX", " KC", "MIA", "MIN", " NE", " NO", "NYG", "NYJ", " LV", "PHI", "PIT", "LAC", " SF", "SEA", "LAR", " TB", "TEN", "WAS"] 
 
-commands = ["lookup_player", "set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "set_random_points", "help"]
+commands = ["lookup_player", "set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "set_random_points", "disp_week_step", "disp_player_step" , "help"]
 
 combinations = list(itertools.combinations(range(len(allTeamStats)), 3)) #generate the list of all combinations
+
+comb_size = len(combinations)
+player_step = int(comb_size / total_players)
+week_step = int(comb_size / weeks)
+
 
 #commands not done
 def weekly_winners():
   print()
-def print_tickets():
-  print()
 
 #commands being worked on
-def test_pdf():
-  if os.path.isfile("tickets.pdf"):
-    print("Deleting past pdf...")
-    os.remove("tickets.pdf")
-    print("Done")
+def create_tickets():
+  loop = 0
   
-  pdfs = int(input("How many (all in one pdf): "))
-  pdf = FPDF()
-  pdf.set_auto_page_break(0)
-  for i in range(0, pdfs):
-    base_ticket(pdf, i)
-    print("ticket pdf made, ticket ID:", i)
-  print("Exporting...")
-  pdf.output('tickets.pdf', 'F')
-  print("Done")
-
-
-
+  for player_ID in range(total_players):
+    teams = []
+    #print(player_ID)
+    if player_ID * player_step + weeks * week_step >= comb_size:
+        loop = comb_size
+        #print("LOOP")
+    for week in range(weeks):
+      teams.append([])
+      #print(week)
+      #print(player_ID * player_step + week * week_step)
+      for team_ID in combinations[player_ID * player_step + week * week_step - loop]:
+        teams[week].append(abc[team_ID])
+    print(teams, "\n")
 
   
 #commands that are done
+def disp_player_step():
+  print(player_step)
+def disp_week_step():
+  print(week_step)
 def help():
   print("Commands: ", end = "")
   for command in commands:
@@ -55,13 +65,22 @@ def help():
   print()
 def lookup_player():
   player_ID = int(input("Player ID: "))
-  player_step = 1 # change if less than 4.9k players       len(combinations) / int(input("players: "))
-  week_step = int(len(combinations)/17)
-  for week in range(0, 17):
+  for week in range(0, weeks):
     print("Week", week)
     for team in combinations[player_ID*player_step + week * week_step]:
       print(team)
     print()
+def test_pdf():
+  pre_pdf()
+  pdfs = int(input("How many (all in one pdf): "))
+  pdf = FPDF()
+  pdf.set_auto_page_break(0)
+  for i in range(0, pdfs):
+    base_ticket(pdf, i)
+    print("ticket pdf made, ticket ID:", i)
+  print("Exporting...")
+  pdf.output('tickets.pdf', 'F')
+  print("Done")
 def set_random_points():
   for team in allTeamStats:
     team[1] = random.randrange(0, 100)
@@ -73,11 +92,13 @@ def display_points():
   for team in allTeamStats:
     print(str("{}: {}").format(team[0], team[1]))
 
-
 #end of commands -------------------
 
-
-
+def pre_pdf():
+  if os.path.isfile("tickets.pdf"):
+    print("Deleting past pdf...")
+    os.remove("tickets.pdf")
+    print("Done")
 
 def base_ticket(pdf, ID):
   pdf.add_page()
@@ -104,6 +125,12 @@ while inp != "done":
     else:
       print(str("'{}' is not a command").format(cmd))
   inp = input(">>")
+
+
+
+
+
+#Things that are not in the program but are going to be put in soon
 
 players = 0 #counts up (simulating another person getting a ticket)
 step = 0 #is re-declared lower, its just here to remind me that it is here
