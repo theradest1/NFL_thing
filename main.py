@@ -11,6 +11,14 @@ football = "Football.png"
 total_players = 4960
 weeks = 17
 
+teams_x_spacing = 24
+teams_y_spacing = 20
+teams_starting_y = 140
+teams_starting_x = 40
+teams_font_size = 10
+week_y = 10
+week_x = 3
+
 #SETUP -------------------------------------------------------------
 #[[name, score], [name, score]]
 allTeamStats = [["Arizona Cardinals", 0],["Atlanta Falcons", 0],["Baltimore Ravens", 0], ["Buffalo Bills", 0],["Carolina Panthers", 0],["Chicago Bears", 0],["Cincinnati Bengals", 0],["Cleveland Browns", 0],["Dallas Cowboys", 0],["Denver Broncos", 0],["Detroit Lions", 0],["Green Bay Packers", 0],["Houston Texans", 0],["Indianapolis Colts", 0],["Jacksonville Jaguars", 0],["Kansas City Chiefs", 0],["Las Vegas Raiders", 0],["Los Angeles Chargers", 0],["Los Angeles Rams", 0],["Miami Dolphins", 0],["Minnesota Vikings", 0],["New England Patriots", 0],["New Orleans Saints", 0],["New York Giants", 0],["New York Jets", 0],["Philadelphia Eagles", 0],["Pittsburgh Steelers", 0],["San Francisco 49ers", 0],["Seattle Seahawks", 0],["Tampa Bay Buccaneers", 0],["Tennessee Titans", 0],["Washington Football Team", 0]]
@@ -35,20 +43,32 @@ def weekly_winners():
 #commands being worked on
 def create_tickets():
   loop = 0
-  
+  pre_pdf()
+  pdf = FPDF()
+  pdf.set_auto_page_break(0)
   for player_ID in range(total_players):
-    teams = []
-    #print(player_ID)
+    base_ticket(pdf, player_ID)
+    pdf.set_font('Arial', '', teams_font_size)
+    print("ticket made, ticket ID:", player_ID)
     if player_ID * player_step + weeks * week_step >= comb_size:
         loop = comb_size
-        #print("LOOP")
     for week in range(weeks):
-      teams.append([])
-      #print(week)
+      teams = []
       #print(player_ID * player_step + week * week_step)
       for team_ID in combinations[player_ID * player_step + week * week_step - loop]:
-        teams[week].append(abc[team_ID])
-    print(teams, "\n")
+        teams.append(''.join(abc[team_ID]))
+      pdf.set_y(teams_starting_y + teams_y_spacing * int(week/6))
+      pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week/6))
+      pdf.cell(0, 0, ''.join(teams), 0, 0, "L", False, "")
+      pdf.set_y(teams_starting_y + teams_y_spacing * int(week/6) - week_y)
+      pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week/6) - week_x)
+      pdf.cell(0, 0, "Week: " + str(week), 0, 0, "L", False, "")
+
+      print(teams, end = "")
+    print()
+  print("Exporting...")
+  pdf.output('tickets.pdf', 'F')
+  print("Done")
 
   
 #commands that are done
@@ -65,10 +85,11 @@ def help():
   print()
 def lookup_player():
   player_ID = int(input("Player ID: "))
+  print()
   for week in range(0, weeks):
     print("Week", week)
     for team in combinations[player_ID*player_step + week * week_step]:
-      print(team)
+      print(*allTeamStats[team])
     print()
 def test_pdf():
   pre_pdf()
@@ -85,9 +106,11 @@ def set_random_points():
   for team in allTeamStats:
     team[1] = random.randrange(0, 100)
   print("done")
+  display_points()
 def set_scores():
   for team in allTeamStats:
     team[1] = int(input(team[0] + "'s Score: "))
+    display_points()
 def display_points():
   for team in allTeamStats:
     print(str("{}: {}").format(team[0], team[1]))
