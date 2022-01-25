@@ -11,21 +11,22 @@ football = "Football.png"
 total_players = 4960
 weeks = 17
 
-teams_x_spacing = 24
-teams_y_spacing = 20
+teams_x_spacing = 12
+teams_y_spacing = 12
 teams_starting_y = 140
 teams_starting_x = 40
-teams_font_size = 10
-week_y = 10
+teams_font_size = 7
+week_y = 3
 week_x = 3
+pdf_center = 306
 
 #SETUP -------------------------------------------------------------
 #[[name, score], [name, score]]
 allTeamStats = [["Arizona Cardinals", 0],["Atlanta Falcons", 0],["Baltimore Ravens", 0], ["Buffalo Bills", 0],["Carolina Panthers", 0],["Chicago Bears", 0],["Cincinnati Bengals", 0],["Cleveland Browns", 0],["Dallas Cowboys", 0],["Denver Broncos", 0],["Detroit Lions", 0],["Green Bay Packers", 0],["Houston Texans", 0],["Indianapolis Colts", 0],["Jacksonville Jaguars", 0],["Kansas City Chiefs", 0],["Las Vegas Raiders", 0],["Los Angeles Chargers", 0],["Los Angeles Rams", 0],["Miami Dolphins", 0],["Minnesota Vikings", 0],["New England Patriots", 0],["New Orleans Saints", 0],["New York Giants", 0],["New York Jets", 0],["Philadelphia Eagles", 0],["Pittsburgh Steelers", 0],["San Francisco 49ers", 0],["Seattle Seahawks", 0],["Tampa Bay Buccaneers", 0],["Tennessee Titans", 0],["Washington Football Team", 0]]
 
-abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y', 'X', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
+team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills', 'Carolina Panthers', 'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos', 'Detroit Lions', 'Green Bay Packers', 'Houston Texans', 'Indianapolis Colts', 'Jacksonville Jaguars', 'Kansas City Chiefs', 'Las Vegas Raiders', 'Los Angeles Chargers', 'Los Angeles Rams', 'Miami Dolphins', 'Minnesota Vikings', 'New England Patriots', 'New Orleans Saints', 'New York Giants', 'New York Jets', 'Philadelphia Eagles', 'Pittsburgh Steelers', 'San Francisco 49ers', 'Seattle Seahawks', 'Tampa Bay Buccaneers', 'Tennessee Titans', 'Washington Football Team']
 
-shortNames = ["ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", "DAL", "DEN", "DET", " GB", "HOU", "IND", "JAX", " KC", "MIA", "MIN", " NE", " NO", "NYG", "NYJ", " LV", "PHI", "PIT", "LAC", " SF", "SEA", "LAR", " TB", "TEN", "WAS"] 
+abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'Y', 'X', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
 
 commands = ["lookup_player", "set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "set_random_points", "disp_week_step", "disp_player_step" , "help"]
 
@@ -46,7 +47,7 @@ def create_tickets():
   pre_pdf()
   pdf = FPDF()
   pdf.set_auto_page_break(0)
-  for player_ID in range(total_players):
+  for player_ID in range(100): #total_players):
     base_ticket(pdf, player_ID)
     pdf.set_font('Arial', '', teams_font_size)
     print("ticket made, ticket ID:", player_ID)
@@ -64,7 +65,7 @@ def create_tickets():
       pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week/6) - week_x)
       pdf.cell(0, 0, "Week: " + str(week), 0, 0, "L", False, "")
 
-      print(teams, end = "")
+      #print(teams, end = "")
     print()
   print("Exporting...")
   pdf.output('tickets.pdf', 'F')
@@ -117,6 +118,21 @@ def display_points():
 
 #end of commands -------------------
 
+def text(pdf, text, x, y, size, style, position):
+  pdf.set_x(x)
+  pdf.set_y(y)
+  pdf.set_font('Arial', style, size)
+  pdf.cell(0, 0, text, 0, 0, position, False, "")
+
+def multi_text(pdf, texts, x, y, y_step, size, style, position):
+  i = 0
+  pdf.set_font('Arial', style, size)
+  for text in texts:
+    i += y_step
+    pdf.set_x(x)
+    pdf.set_y(i + y)
+    pdf.cell(0, 0, text, 0, 0, position, False, "")
+
 def pre_pdf():
   if os.path.isfile("tickets.pdf"):
     print("Deleting past pdf...")
@@ -126,16 +142,21 @@ def pre_pdf():
 def base_ticket(pdf, ID):
   pdf.add_page()
   pdf.set_fill_color(255, 255, 255)
-  pdf.rect(0, 0, 300, 1000, "FD")
-  pdf.image(football, 50, 30, 0, 0, 'PNG')# - how to add an image
-  pdf.set_font('Arial', 'B', 13)
-  pdf.cell(0, 20, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 0, 2, "C", False, "")
-  pdf.set_font('Arial', 'B', 9)
-  pdf.cell(0, 0, "Rules:", 0, 2, "l", False, "")
-  pdf.set_font('Arial', '', 7)
-  pdf.multi_cell(0, 4, "\n1. This ticket is valid for the 17 \nweeks of the regular season.\n2. Each ticket has three teams/week and the\nscores added together determine the winners\n3. In case of ties, prizes are combined and\nsplit wetween the ties.\n4. No other ticket hs the same team combination\nfor each week as this ticket.\n5. Teams not playing on a given week will\nbe assigned the previous week's score.", 0, 'L', False)
   pdf.rect(5, 5, 200, 100, "D")
-  pdf.cell(0, 0, str(ID))
+  #pdf.image(football, 50, 30, 0, 0, 'PNG') # - how to add an image
+
+  text(pdf, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", pdf_center, 20, 13, 'b', 'C')
+
+  text(pdf, 'Rules:', 10, 60, 9, '', 'L')
+
+  multi_text(pdf, ["1. This ticket is valid for the 17 weeks of the regular season.", "2. Each ticket has three teams/week and the scores added together determine the winners", "3. In case of ties, prizes are combined and split wetween the ties.", "4. No other ticket hs the same team combination for each week as this ticket.", "5. Teams not playing on a given week will be assigned the previous week's score."], 10, 60, 4, 7, '', "L")
+
+  for i in range(32):
+    
+  
+
+  text(pdf, "Your Teams Are:", 306, 110, 13, "B", "C")
+  text(pdf, "Player ID: " + str(ID), 10, 10, 7, '', 'L')
 
 inp = ""
 while inp != "done":
