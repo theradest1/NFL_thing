@@ -13,7 +13,7 @@ weeks = 17
 
 teams_x_spacing = 12
 teams_y_spacing = 12
-teams_starting_y = 140
+teams_starting_y = 120
 teams_starting_x = 10
 teams_font_size = 7
 week_y = 3
@@ -42,35 +42,6 @@ comb_size = len(combinations)
 player_step = int(comb_size / total_players)
 week_step = int(comb_size / weeks)
 
-
-
-def base_ticket(pdf, ID):
-  pdf.add_page()
-  pdf.set_fill_color(255, 255, 255)
-  pdf.rect(5, 5, 200, 100, "D")
-  #pdf.image(football, 50, 30, 0, 0, 'PNG') # - how to add an image
-
-  text(pdf, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 20, 20, 13, 'b', 'L')
-
-  text(pdf, 'Rules:', 10, 60, 9, '', 'L')
-
-  multi_text(pdf, ["1. This ticket is valid for the 17 weeks of the regular season.", "2. Each ticket has three teams/week and the scores added together determine the winners", "3. In case of ties, prizes are combined and split wetween the ties.", "4. No other ticket hs the same team combination for each week as this ticket.", "5. Teams not playing on a given week will be assigned the previous week's score."], 10, 60, 4, 7, '', "L")
-
-  #pdf.set_font('Arial', '', names_font_size)
-  for i in range(8):
-    for j in range(4):
-      if True:
-        pdf.set_y(i * names_y_spacing + names_starting_y)
-        pdf.set_x(j * names_x_spacing + names_starting_x)
-        pdf.cell(0, 0, abc[i*4 + j] + ": " + team_names[i*4 + j], 0, 0, "L", False, "")
-  
-    
-  text(pdf, "Your Teams Are:", 306, 110, 13, "B", "C")
-  text(pdf, "Player ID: " + str(ID), 10, 10, 7, '', 'L')
-
-
-
-
 #commands not done
 def weekly_winners():
   print()
@@ -83,10 +54,11 @@ def create_tickets():
   pdf.set_auto_page_break(0)
   for player_ID in range(100): #total_players):
     base_ticket(pdf, player_ID)
-    pdf.set_font('Arial', '', teams_font_size)
     print("ticket made, ticket ID:", player_ID)
     if player_ID * player_step + weeks * week_step >= comb_size:
         loop = comb_size
+    text(pdf, "Your Teams Are:", 19, 110, 15, 'B', 'L')
+    pdf.set_font('Arial', '', teams_font_size)
     for week in range(weeks):
       teams = []
       #print(player_ID * player_step + week * week_step)
@@ -152,6 +124,29 @@ def display_points():
 
 #end of commands -------------------
 
+def base_ticket(pdf, ID):
+  pdf.add_page()
+  pdf.set_fill_color(255, 255, 255)
+  pdf.rect(5, 5, 200, 100, "D")
+  #pdf.image(football, 50, 30, 0, 0, 'PNG') # - how to add an image
+
+  text(pdf, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 20, 10, 13, 'b', 'L')
+
+  text(pdf, 'Rules:', 10, 60, 9, '', 'L')
+
+  multi_text(pdf, ["1. This ticket is valid for the 17 weeks of the regular season.", "2. Each ticket has three teams/week and the scores added together determine the winners", "3. In case of ties, prizes are combined and split wetween the ties.", "4. No other ticket hs the same team combination for each week as this ticket.", "5. Teams not playing on a given week will be assigned the previous week's score."], 10, 60, 4, 7, '', "L")
+
+  #pdf.set_font('Arial', '', names_font_size)
+  for i in range(8):
+    for j in range(4):
+      pdf.set_y(i * names_y_spacing + names_starting_y)
+      pdf.set_x(j * names_x_spacing + names_starting_x)
+      pdf.cell(0, 0, abc[i*4 + j] + ": " + team_names[i*4 + j], 0, 0, "L", False, "")
+  
+    
+  text(pdf, "Your Teams Are:", 306, 110, 13, "B", "C")
+  text(pdf, "Player ID: " + str(ID), 10, 10, 7, '', 'L')
+
 def text(pdf, text, x, y, size, style, position):
   pdf.set_y(y)
   pdf.set_x(x)
@@ -185,8 +180,6 @@ while inp != "done":
     else:
       print(str("'{}' is not a command").format(cmd))
   inp = input(">>")
-
-
 
 
 
