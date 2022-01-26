@@ -9,19 +9,25 @@ square = "Square.png"
 football = "Football.png"
 
 total_players = 4960
-weeks = 17
+weeks = 18
 
 teams_x_spacing = 12
 teams_y_spacing = 12
 teams_starting_y = 120
-teams_starting_x = 10
+teams_starting_x = 70
 teams_font_size = 7
+teams_title_y = -10
+teams_title_x = -60
+teams_box_margin = 5
+teams_box_width = 78
+teams_box_hight = 50
+
 week_y = 3
 week_x = 3
 
 names_x_spacing = 40
 names_y_spacing = 3
-names_starting_y = 30
+names_starting_y = 18
 names_starting_x = 10
 names_font_size = 5
 name_ID_length = 4
@@ -57,7 +63,6 @@ def create_tickets():
     print("ticket made, ticket ID:", player_ID)
     if player_ID * player_step + weeks * week_step >= comb_size:
         loop = comb_size
-    text(pdf, "Your Teams Are:", 19, 110, 15, 'B', 'L')
     pdf.set_font('Arial', '', teams_font_size)
     for week in range(weeks):
       teams = []
@@ -69,7 +74,7 @@ def create_tickets():
       pdf.cell(0, 0, ''.join(teams), 0, 0, "L", False, "")
       pdf.set_y(teams_starting_y + teams_y_spacing * int(week/6) - week_y)
       pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week/6) - week_x)
-      pdf.cell(0, 0, "Week: " + str(week), 0, 0, "L", False, "")
+      pdf.cell(0, 0, "Week: " + str(week + 1), 0, 0, "L", False, "")
 
       #print(teams, end = "")
     print()
@@ -127,14 +132,15 @@ def display_points():
 def base_ticket(pdf, ID):
   pdf.add_page()
   pdf.set_fill_color(255, 255, 255)
-  pdf.rect(5, 5, 200, 100, "D")
+  pdf.rect(0, 0, 1000, 1000, "FD")
+  pdf.rect(5, 5, 200,100, "D")
   #pdf.image(football, 50, 30, 0, 0, 'PNG') # - how to add an image
 
   text(pdf, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 20, 10, 13, 'b', 'L')
 
-  text(pdf, 'Rules:', 10, 60, 9, '', 'L')
+  text(pdf, 'Rules:', 10, 45, 9, '', 'L')
 
-  multi_text(pdf, ["1. This ticket is valid for the 17 weeks of the regular season.", "2. Each ticket has three teams/week and the scores added together determine the winners", "3. In case of ties, prizes are combined and split wetween the ties.", "4. No other ticket hs the same team combination for each week as this ticket.", "5. Teams not playing on a given week will be assigned the previous week's score."], 10, 60, 4, 7, '', "L")
+  multi_text(pdf, ["1. This ticket is valid for the 17 weeks of the regular season.", "2. Each ticket has three teams/week and the scores added together determine the winners", "3. In case of ties, prizes are combined and split wetween the ties.", "4. No other ticket hs the same team combination for each week as this ticket.", "5. Teams not playing on a given week will be assigned the previous week's score."], 10, 46, 4, 7, '', "L")
 
   #pdf.set_font('Arial', '', names_font_size)
   for i in range(8):
@@ -143,9 +149,9 @@ def base_ticket(pdf, ID):
       pdf.set_x(j * names_x_spacing + names_starting_x)
       pdf.cell(0, 0, abc[i*4 + j] + ": " + team_names[i*4 + j], 0, 0, "L", False, "")
   
-    
-  text(pdf, "Your Teams Are:", 306, 110, 13, "B", "C")
-  text(pdf, "Player ID: " + str(ID), 10, 10, 7, '', 'L')
+  pdf.rect(teams_starting_x - teams_box_margin, teams_starting_y - teams_box_margin + teams_title_y, teams_box_width, teams_box_hight, "D")
+  text(pdf, "Your Teams Are:", teams_starting_x + teams_title_x, teams_starting_y + teams_title_y, 13, "B", "C")
+  text(pdf, "Player ID: " + str(ID), 6, 10, 5, '', 'L')
 
 def text(pdf, text, x, y, size, style, position):
   pdf.set_y(y)
@@ -180,74 +186,3 @@ while inp != "done":
     else:
       print(str("'{}' is not a command").format(cmd))
   inp = input(">>")
-
-
-
-#Things that are not in the program but are going to be put in soon
-
-players = 0 #counts up (simulating another person getting a ticket)
-step = 0 #is re-declared lower, its just here to remind me that it is here
-weeks = 17 #the amount of weeks this goes on for (change to 17 when done with dev)
-playerScores = [] # [[234, 26, 234, 567], [235, 235, 235]...]
-
-for i in range(weeks):
-  playerScores.append([]) #setting up the list (not sure how else to do this just let me know if there is a better way)
-
-for teamInfo in allTeamStats:
-  teamInfo[1] = random.randrange(1, 100) #setting scores for all the teams (will need to be not random later)
-
-week_step = int(len(combinations)/17)
-
-#debug
-print("Format: [Team_Name, Score] \n", allTeamStats)
-print("\n" + str(len(combinations)), "combinations")#"\n", combinations) #display all combinations (a lot)
-#print("# of players:", players) #not an exact amount so I removed it
-print("Per week step amount:", step)
-print("Per player step amount:", 1, "\n")
-
-def getScores():
-  estimated_players = len(combinations)
-  player_step = 1
-  #player_step = int((len(combinations) - step)/(int(input("Estimated amount of players:\n>> ")) * 3))
-  command = ""
-  player_ID = 0
-  while player_ID < estimated_players:#command != "done":
-    #for player_ID in range(players):
-    print("\nPlayer_ID:", player_ID) #debug
-    for week_number in range(weeks): 
-      score = 0 #reset the score every time it loops over another player
-      combination_ID = player_step * player_ID + week_number * step #for every player adds a player_step, for every week it adds a step, making it so everyone has different combinations no matter what
-      if combination_ID >= len(combinations):
-        combination_ID -= len(combinations) #if the combination_ID will go over the length of the combination list, it loops back to the beginning
-      for team_ID in combinations[combination_ID]:
-        score += allTeamStats[team_ID][1] #combining all the scores of the teams for that week to compare with others
-      playerScores[week_number].append(score + player_ID / 10000) #add the score and the player_ID to a list so we can sort it later to find the winners
-      #print("Comb_ID: " + str(combination_ID) + ",", combinations[combination_ID],"=", score) #debug
-      for team in combinations[combination_ID]:
-        print(shortNames[team] + ", ", end = '')
-      print("")
-    #command = input(">> ")
-    player_ID += 1
-  return(playerScores)
-
-def getWinners(): #***** does not do ties yet
-  winners = [] #declare var
-  for week in playerScores:
-    week.sort(reverse = True) #sort the points in decending order
-    #print(week) #debug
-    winners.append(0) #a spacer so i can see the end of the week (and im too lazy to make a array of lists)
-    for i in range(3):
-      winners.append(week[i]) #adds the top 3 scores to a list (with 0s to seperate the weeks)
-  return winners
-
-playerScores = getScores()
-winners = getWinners()
-#print(playerScores) #debug
-#print("\n", winners) #debug
-week = 0
-for player in winners:
-  if player != 0:
-    print(int(round(math.modf(player)[0] * 10000,0))) #display the winner's ID
-  else:
-    week += 1
-    print("\nWeek", week, "winners:") #some ease of life stuffs
