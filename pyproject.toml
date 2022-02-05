@@ -1,16 +1,15 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+[tool]
 [tool.poetry]
+authors = ["bacon (Landon Bakken)"]
+description = "for a nfl funraiser"
 name = "nflthing"
 version = "0.1.0"
-description = "for a nfl funraiser"
-authors = ["bacon (Landon Bakken)"]
-
 [tool.poetry.dependencies]
-python = "^3.8"
-git42 = "^2021.1.31"
 fpdf = "^1.7.2"
-
+git42 = "^2021.1.31"
+python = "^3.8"
 [tool.poetry.dev-dependencies]
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"

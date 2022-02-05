@@ -56,8 +56,10 @@ def weekly_winners():
 def create_tickets():
   loop = 0
   pre_pdf()
-  pdf = FPDF()
+  pdf = FPDF("P", "in", (8.5, 2.75))
   pdf.set_auto_page_break(0)
+  pdf.add_page()
+  pdf.image("ticket_back.png", 0, 0, 8.5, 2.75, 'PNG') # - how to add an image
   for player_ID in range(100): #total_players):
     base_ticket(pdf, player_ID)
     print("ticket made, ticket ID:", player_ID)
@@ -134,24 +136,25 @@ def base_ticket(pdf, ID):
   pdf.set_fill_color(255, 255, 255)
   pdf.rect(0, 0, 1000, 1000, "FD")
   pdf.rect(5, 5, 200,100, "D")
-  #pdf.image(football, 50, 30, 0, 0, 'PNG') # - how to add an image
+  #pdf.image("ticket_front.png", 0, 0, 8.5, 2.75, 'PNG') # - how to add an image
 
-  text(pdf, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 20, 10, 13, 'b', 'L')
+  if 0:
+    text(pdf, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 20, 10, 13, 'b', 'L')
 
-  text(pdf, 'Rules:', 10, 45, 9, '', 'L')
+    text(pdf, 'Rules:', 10, 45, 9, '', 'L')
 
-  multi_text(pdf, ["1. This ticket is valid for the 17 weeks of the regular season.", "2. Each ticket has three teams/week and the scores added together determine the winners", "3. In case of ties, prizes are combined and split wetween the ties.", "4. No other ticket hs the same team combination for each week as this ticket.", "5. Teams not playing on a given week will be assigned the previous week's score."], 10, 46, 4, 7, '', "L")
+    multi_text(pdf, ["1. This ticket is valid for the 17 weeks of the regular season.", "2. Each ticket has three teams/week and the scores added together determine the winners", "3. In case of ties, prizes are combined and split wetween the ties.", "4. No other ticket hs the same team combination for each week as this ticket.", "5. Teams not playing on a given week will be assigned the previous week's score."], 10, 46, 4, 7, '', "L")
 
-  #pdf.set_font('Arial', '', names_font_size)
-  for i in range(8):
-    for j in range(4):
-      pdf.set_y(i * names_y_spacing + names_starting_y)
-      pdf.set_x(j * names_x_spacing + names_starting_x)
-      pdf.cell(0, 0, abc[i*4 + j] + ": " + team_names[i*4 + j], 0, 0, "L", False, "")
-  
-  pdf.rect(teams_starting_x - teams_box_margin, teams_starting_y - teams_box_margin + teams_title_y, teams_box_width, teams_box_hight, "D")
-  text(pdf, "Your Teams Are:", teams_starting_x + teams_title_x, teams_starting_y + teams_title_y, 13, "B", "C")
-  text(pdf, "Player ID: " + str(ID), 6, 10, 5, '', 'L')
+    #pdf.set_font('Arial', '', names_font_size)
+    for i in range(8):
+      for j in range(4):
+        pdf.set_y(i * names_y_spacing + names_starting_y)
+        pdf.set_x(j * names_x_spacing + names_starting_x)
+        pdf.cell(0, 0, abc[i*4 + j] + ": " + team_names[i*4 + j], 0, 0, "L", False, "")
+    
+    pdf.rect(teams_starting_x - teams_box_margin, teams_starting_y - teams_box_margin + teams_title_y, teams_box_width, teams_box_hight, "D")
+    text(pdf, "Your Teams Are:", teams_starting_x + teams_title_x, teams_starting_y + teams_title_y, 13, "B", "C")
+    text(pdf, "Player ID: " + str(ID), 6, 10, 5, '', 'L')
 
 def text(pdf, text, x, y, size, style, position):
   pdf.set_y(y)
