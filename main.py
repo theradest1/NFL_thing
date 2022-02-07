@@ -7,30 +7,21 @@ import os
 
 square = "Square.png"
 football = "Football.png"
+back = "ticket_back.png"
+front = "ticket_front.png"
 
 total_players = 4960
 weeks = 18
 
-teams_x_spacing = 12
-teams_y_spacing = 12
-teams_starting_y = 120
-teams_starting_x = 70
-teams_font_size = 7
-teams_title_y = -10
-teams_title_x = -60
-teams_box_margin = 5
-teams_box_width = 78
-teams_box_hight = 50
+teams_x_spacing = .6
+teams_y_spacing = .6
+teams_starting_y = 1.2
+teams_starting_x = 2.5
+teams_font_size = 9
+weeks_font_size = 7
 
-week_y = 3
-week_x = 3
-
-names_x_spacing = 40
-names_y_spacing = 3
-names_starting_y = 18
-names_starting_x = 10
-names_font_size = 5
-name_ID_length = 4
+week_y = .2
+week_x = 0
 
 #SETUP -------------------------------------------------------------
 #[[name, score], [name, score]]
@@ -55,17 +46,22 @@ def weekly_winners():
 #commands being worked on
 def create_tickets():
   loop = 0
-  pre_pdf()
+  print("Setting up pdf...")
   pdf = FPDF("P", "in", (8.5, 2.75))
   pdf.set_auto_page_break(0)
+  print("Done")
+  print("Creating information page...")
   pdf.add_page()
-  pdf.image("ticket_back.png", 0, 0, 8.5, 2.75, 'PNG') # - how to add an image
-  for player_ID in range(100): #total_players):
-    base_ticket(pdf, player_ID)
-    print("ticket made, ticket ID:", player_ID)
+  pdf.image(back, 0, 0, 8.5, 2.75, 'PNG') # - how to add an image
+  print("Done")
+  print("Creating teams page...")
+  for player_ID in range(total_players):
+    base_ticket(pdf)
+    text(pdf, "No. " + str(player_ID + 1), .5, .1, 7, '', 'L')
+    text(pdf, "No. " + str(player_ID + 1), 2.5, .6, 7, '', 'L')
+    print("ticket made, ticket ID:", player_ID + 1)
     if player_ID * player_step + weeks * week_step >= comb_size:
         loop = comb_size
-    pdf.set_font('Arial', '', teams_font_size)
     for week in range(weeks):
       teams = []
       #print(player_ID * player_step + week * week_step)
@@ -73,13 +69,17 @@ def create_tickets():
         teams.append(''.join(abc[team_ID]))
       pdf.set_y(teams_starting_y + teams_y_spacing * int(week/6))
       pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week/6))
+      pdf.set_font('Arial', 'B', teams_font_size)
       pdf.cell(0, 0, ''.join(teams), 0, 0, "L", False, "")
       pdf.set_y(teams_starting_y + teams_y_spacing * int(week/6) - week_y)
       pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week/6) - week_x)
-      pdf.cell(0, 0, "Week: " + str(week + 1), 0, 0, "L", False, "")
+      pdf.set_font('Arial', 'B', weeks_font_size)
+      pdf.cell(0, 0, "Week " + str(week), 0, 0, "L", False, "")
 
       #print(teams, end = "")
-    print()
+    #print()
+  print("Done")
+  delete_past_pdf("tickets.pdf")
   print("Exporting...")
   pdf.output('tickets.pdf', 'F')
   print("Done")
@@ -106,13 +106,13 @@ def lookup_player():
       print(*allTeamStats[team])
     print()
 def test_pdf():
-  pre_pdf()
   pdfs = int(input("How many (all in one pdf): "))
   pdf = FPDF()
   pdf.set_auto_page_break(0)
   for i in range(0, pdfs):
     base_ticket(pdf, i)
     print("ticket pdf made, ticket ID:", i)
+  delete_past_pdf("tickets.pdf")
   print("Exporting...")
   pdf.output('tickets.pdf', 'F')
   print("Done")
@@ -131,30 +131,13 @@ def display_points():
 
 #end of commands -------------------
 
-def base_ticket(pdf, ID):
+def base_ticket(pdf):
   pdf.add_page()
   pdf.set_fill_color(255, 255, 255)
   pdf.rect(0, 0, 1000, 1000, "FD")
   pdf.rect(5, 5, 200,100, "D")
-  #pdf.image("ticket_front.png", 0, 0, 8.5, 2.75, 'PNG') # - how to add an image
-
-  if 0:
-    text(pdf, "Total Prizes: $17,170 - $1,010 Given Each Week For 17 Weeks", 20, 10, 13, 'b', 'L')
-
-    text(pdf, 'Rules:', 10, 45, 9, '', 'L')
-
-    multi_text(pdf, ["1. This ticket is valid for the 17 weeks of the regular season.", "2. Each ticket has three teams/week and the scores added together determine the winners", "3. In case of ties, prizes are combined and split wetween the ties.", "4. No other ticket hs the same team combination for each week as this ticket.", "5. Teams not playing on a given week will be assigned the previous week's score."], 10, 46, 4, 7, '', "L")
-
-    #pdf.set_font('Arial', '', names_font_size)
-    for i in range(8):
-      for j in range(4):
-        pdf.set_y(i * names_y_spacing + names_starting_y)
-        pdf.set_x(j * names_x_spacing + names_starting_x)
-        pdf.cell(0, 0, abc[i*4 + j] + ": " + team_names[i*4 + j], 0, 0, "L", False, "")
+  pdf.image(front, 0, 0, 8.5, 2.75, 'PNG') # - how to add an image
     
-    pdf.rect(teams_starting_x - teams_box_margin, teams_starting_y - teams_box_margin + teams_title_y, teams_box_width, teams_box_hight, "D")
-    text(pdf, "Your Teams Are:", teams_starting_x + teams_title_x, teams_starting_y + teams_title_y, 13, "B", "C")
-    text(pdf, "Player ID: " + str(ID), 6, 10, 5, '', 'L')
 
 def text(pdf, text, x, y, size, style, position):
   pdf.set_y(y)
@@ -171,10 +154,10 @@ def multi_text(pdf, texts, x, y, y_step, size, style, position):
     pdf.set_y(i + y)
     pdf.cell(0, 0, text, 0, 0, position, False, "")
 
-def pre_pdf():
-  if os.path.isfile("tickets.pdf"):
+def delete_past_pdf(pdf):
+  if os.path.isfile(pdf):
     print("Deleting past pdf...")
-    os.remove("tickets.pdf")
+    os.remove(pdf)
     print("Done")
 
 create_tickets()
