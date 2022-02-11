@@ -33,7 +33,7 @@ abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'
 
 commands = ["lookup_player", "set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "random_points", "disp_week_step", "disp_player_step" , "help"]
 
-prizes = ["500", "250", "100", "75", "50", "25", "10"]
+prizes = [500, 250, 100, 75, 50, 25, 10]
 
 combinations = list(itertools.combinations(range(len(allTeamStats)), 3))  # generate the list of all combinations
 
@@ -56,15 +56,52 @@ def weekly_winners():
     total_score = 0
     for team in combination:
       total_score += allTeamStats[team][1]
-    player_scores.append(round(total_score + (player_ID + 1)/10000 + .00001, 5))  # need to add .00001 to get rid
-    # of rounding and round() to get rid of floating points errors
-  print(player_scores)
+    player_scores.append(round(total_score + (player_ID + 1)/10000 + .00001, 5))  # need to add .00001 to get rid of rounding and round() to get rid of floating points errors
+  #print(player_scores)
   player_scores.sort(reverse=True)
-  print(player_scores)
-  for i in range(4):
-    print(f"Player ID: {str(player_scores[i])[-5:-1]}   Prize: {prizes[i]}")
-  for i in range(3):
-    print(f"Player ID: {str(player_scores[-i - 1])[-5:-1]}   Prize: {prizes[i + 4]}")
+  #print(player_scores)
+  i = -1
+  j = -1
+  winners = []
+  while i < 3:
+    i += 1
+    j += 1
+    if int(player_scores[j]) == int(player_scores[j + 1]):
+      i -= 1
+    winners.append(player_scores[j])
+
+  i = -1
+  j = 0
+  while i < 2:
+    i += 1
+    j -= 1
+    if int(player_scores[j]) == int(player_scores[j - 1]):
+      i -= 1
+    winners.append(player_scores[j])
+  i = 0
+  if len(winners) == 7:
+    for winner in winners:
+      print(f"Player ID: {str(winner)[-5:-1]}, Score: {int(winner)}, Prize: {prizes[i]}") 
+      i += 1
+  else:
+    i = 0
+    for winner in winners:
+      share = 1
+      #i = 0
+      for sharer in winners:
+        if int(winner) == int(sharer) and winner != sharer:
+          share += 1
+      print(share)
+      if share > 1:
+        i -= 1
+      print(f"Player ID: {str(winner)[-5:-1]}, Score: {int(winner)}, Prize: {prizes[i]/share}")
+      i += 1
+
+  #for i in range(8):
+  #  print(f"Player ID: {str(player_scores[i])[-5:-1]}   Points: {player_scores[i]}")#    Prize: {prizes[i]}")
+  #for i in range(3):
+  #  print(f"Player ID: {str(player_scores[-i - 1])[-5:-1]}   Prize: {prizes[i + 4]}")
+
 
 
 # commands that are done
@@ -81,7 +118,7 @@ def create_tickets():
   pdf.image(back, 0, 0, 8.5, 2.75, 'PNG') # - how to add an image
   print("Done")
   print("Creating teams page...")
-  for player_ID in range(total_players):
+  for player_ID in range(100):#total_players):
     base_ticket(pdf)
     text(pdf, "No. " + str(player_ID + 1), .5, .1, 7, '', 'L')
     text(pdf, "No. " + str(player_ID + 1), 2.5, .6, 7, '', 'L')
@@ -203,7 +240,8 @@ def delete_past_pdf(pdf):
     os.remove(pdf)
     print("Done")
 
-
+random_points()
+weekly_winners()
 inp = ""
 while inp != "done":
   if len(inp.split()) > 0:
