@@ -97,55 +97,14 @@ def weekly_winners():
     i = -1
     j = -1
     winners = []
-    # while i < 3:
-    #  i += 1
-    #  j += 1
-    #  if int(player_scores[j]) == int(player_scores[j + 1]):
-    #    i -= 1
-    #  winners.append(player_scores[j])
-
-    # i = -1
-    # j = 0
-    # while i < 2:
-    #  i += 1
-    #  j -= 1
-    #  if int(player_scores[j]) == int(player_scores[j - 1]):
-    #    i -= 1
-    #  winners.append(player_scores[j])
-    # i = 0
 
     print("\nHighest scores:")
     for i in range(20):
-        # print(i)
         print(f"Ticket No. {str(player_scores[i])[-5:-1]}, Score: {int(player_scores[i])}")
 
     print("\nLowest scores:")
     for i in range(len(player_scores) - 1, len(player_scores) - 20, -1):
-        # print(i)
         print(f"Ticket No. {str(player_scores[i])[-5:-1]}, Score: {int(player_scores[i])}")
-
-    # if len(winners) == 7:
-    # for winner in winners:
-    #  print(f"Ticket No. {str(winner)[-5:-1]}, Score: {int(winner)}")
-
-    # i += 1
-    # else:
-    #  i = -1
-    #  for winner in winners:
-    #    share = 1
-    #    for sharer in winners:
-    #      if int(winner) == int(sharer) and winner != sharer:
-    #        share += 1
-    #    #print(i)
-    #    print(f"Ticket No. {str(winner)[-5:-1]}, Score: {int(winner)}")
-
-    # for i in range(8):
-    #  print(f"Player ID: {str(player_scores[i])[-5:-1]}   Points: {player_scores[i]}")#    Prize: {prizes[i]}")
-    # for i in range(3):
-    #  print(f"Player ID: {str(player_scores[-i - 1])[-5:-1]}   Prize: {prizes[i + 4]}")
-
-
-# commands that are done
 
 
 def create_tickets():
@@ -159,7 +118,8 @@ def create_tickets():
     pdf.image(back, 0, 0, 8.5, 2.75, 'PNG')  # - how to add an image
     print("Done")
     print("Creating teams page...")
-    for player_ID in range(total_players):
+    for player_ID in range(100): #total_players):
+        trueID = actualTicketNumber(player_ID)
         base_ticket(pdf)
         text(pdf, "Ticket No. " + str(player_ID + 1), .5, .1, 7, '', 'L')
         text(pdf, "Ticket No. " + str(player_ID + 1), 2.5, .6, 7, '', 'L')
@@ -250,6 +210,8 @@ def display_points():
 
 # end of commands -------------------
 
+def actualTicketNumber():
+  
 
 def base_ticket(pdf):
     pdf.add_page()
