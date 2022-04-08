@@ -19,6 +19,8 @@ front = "C:\\Users\\18326\PycharmProjects\\first\\ticket_front.png"
 total_players = 4960
 weeks = 18
 
+jump = 496
+
 teams_x_spacing = .6
 teams_y_spacing = .6
 teams_starting_y = 1.2
@@ -119,17 +121,14 @@ def create_tickets():
     print("Done")
     print("Creating teams page...")
     for player_ID in range(100): #total_players):
-        trueID = actualTicketNumber(player_ID)
         base_ticket(pdf)
-        text(pdf, "Ticket No. " + str(player_ID + 1), .5, .1, 7, '', 'L')
+        text(pdf, "Ticket No. " + str(player_ID + 1) + "True No. " + str(actualTicketNumber((player_ID))), .5, .1, 7, '', 'L')
         text(pdf, "Ticket No. " + str(player_ID + 1), 2.5, .6, 7, '', 'L')
         print("ticket made, ticket ID:", player_ID + 1)
-        if player_ID * player_step + weeks * week_step >= comb_size:
-            loop = comb_size
         for week in range(weeks):
             teams = []
             # print(player_ID * player_step + week * week_step)
-            for team_ID in combinations[player_ID * player_step + week * week_step - loop]:
+            for team_ID in combinations[(actualTicketNumber(player_ID) * player_step + week * week_step)%(len(combinations) - 1)]:
                 teams.append(''.join(abc[team_ID]))
             pdf.set_y(teams_starting_y + teams_y_spacing * int(week / 6))
             pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week / 6))
@@ -144,7 +143,8 @@ def create_tickets():
         # print()
     print("Done")
     delete_past_pdf("tickets.pdf")
-    name = input("Enter the path and name you want it to have (example: C:\\\\Users\\\\18326\\\\Desktop\\\\tickets.pdf): ")
+    name = input(
+        "Enter the path and name you want it to have (example: C:\\\\Users\\\\18326\\\\Desktop\\\\tickets.pdf): ")
     print("Exporting...")
     pdf.output(name, 'F')
     print("Done")
@@ -209,9 +209,9 @@ def display_points():
 
 
 # end of commands -------------------
+def actualTicketNumber(ID):
+    return (ID * jump + int(ID * jump / len(combinations))) % len(combinations)
 
-def actualTicketNumber():
-  
 
 def base_ticket(pdf):
     pdf.add_page()
