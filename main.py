@@ -33,7 +33,7 @@ week_x = 0
 
 # SETUP -------------------------------------------------------------
 # [[name, score], [name, score]]
-allTeamStats = [["Arizona Cardinals", 0], ["Atlanta Falcons", 0], ["Baltimore Ravens", 0], ["Buffalo Bills", 0],
+allTeamStats = [["Arizona Cardinals", 10], ["Atlanta Falcons", 5], ["Baltimore Ravens", 2], ["Buffalo Bills", 0],
                 ["Carolina Panthers", 0], ["Chicago Bears", 0], ["Cincinnati Bengals", 0], ["Cleveland Browns", 0],
                 ["Dallas Cowboys", 0], ["Denver Broncos", 0], ["Detroit Lions", 0], ["Green Bay Packers", 0],
                 ["Houston Texans", 0], ["Indianapolis Colts", 0], ["Jacksonville Jaguars", 0],
@@ -91,8 +91,7 @@ def weekly_winners():
         print(combination)
         for team in combination:
             total_score += allTeamStats[team][1]
-        player_scores.append(round(total_score + (player_ID + 1) / 10000 + .00001,
-                                   5))  # need to add .00001 to get rid of rounding and round() to get rid of floating points errors
+        player_scores.append(round(total_score + player_ID / 10000 + .00001,5))  # need to add .00001 to get rid of rounding and round() to get rid of floating points errors
     # print(player_scores)
     player_scores.sort(reverse=True)
     # print(player_scores)
@@ -101,12 +100,12 @@ def weekly_winners():
     winners = []
 
     print("\nHighest scores:")
-    for i in range(20):
-        print(f"Ticket No. {str(player_scores[i])[-5:-1]}, Score: {int(player_scores[i])}")
+    for i in range(50):
+        print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
 
     print("\nLowest scores:")
     for i in range(len(player_scores) - 1, len(player_scores) - 20, -1):
-        print(f"Ticket No. {str(player_scores[i])[-5:-1]}, Score: {int(player_scores[i])}")
+        print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
 
 
 def create_tickets():
@@ -120,9 +119,9 @@ def create_tickets():
     pdf.image(back, 0, 0, 8.5, 2.75, 'PNG')  # - how to add an image
     print("Done")
     print("Creating teams page...")
-    for player_ID in range(100): #total_players):
+    for player_ID in range(total_players):
         base_ticket(pdf)
-        text(pdf, "Ticket No. " + str(player_ID + 1) + "True No. " + str(actualTicketNumber((player_ID))), .5, .1, 7, '', 'L')
+        text(pdf, "Ticket No. " + str(player_ID + 1) + " Actual: " + str(actualTicketNumber(player_ID)), .5, .1, 7, '', 'L')
         text(pdf, "Ticket No. " + str(player_ID + 1), 2.5, .6, 7, '', 'L')
         print("ticket made, ticket ID:", player_ID + 1)
         for week in range(weeks):
@@ -210,6 +209,9 @@ def display_points():
 
 # end of commands -------------------
 def actualTicketNumber(ID):
+    return (ID * jump + int(ID * jump / len(combinations))) % len(combinations)
+
+def displayNumber(ID):
     return (ID * jump + int(ID * jump / len(combinations))) % len(combinations)
 
 
