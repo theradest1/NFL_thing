@@ -212,7 +212,7 @@ def actualTicketNumber(ID):
     return (ID * jump + int(ID * jump / len(combinations))) % len(combinations)
 
 def displayNumber(ID):
-    return (ID * jump + int(ID * jump / len(combinations))) % len(combinations)
+    return (ID - 1 * jump) % (len(combinations) - 1)
 
 
 def base_ticket(pdf):
