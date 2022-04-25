@@ -4,7 +4,7 @@ from operator import itemgetter
 import math
 from fpdf import FPDF
 import os
-import tkinter as tk
+#import tkinter as tk
 
 # window = tk.Tk()
 # greeting = tk.Label(text="Hello, Tkinter")
@@ -64,7 +64,7 @@ combinations = list(itertools.combinations(range(len(allTeamStats)), 3))  # gene
 comb_size = len(combinations)
 player_step = int(comb_size / total_players)
 week_step = int(comb_size / weeks)
-print(week_step)
+#print(week_step)
 
 
 # commands not done
@@ -74,14 +74,14 @@ print(week_step)
 
 
 def weekly_winners():
-    week = int(input("What week: "))
+    week = int(input("What week (1-18): ")) - 1
     player_scores = []
     player_ID = -1
 
     for i in range(len(combinations)):  # combination in combinations:
         player_ID += 1
         total_score = 0
-        if (i + week * week_step >= len(combinations)):
+        if i + week * week_step >= len(combinations):
             combination = combinations[i + week * week_step - len(combinations)]
             print(i + week * week_step - len(combinations))
         else:
@@ -91,7 +91,7 @@ def weekly_winners():
         print(combination)
         for team in combination:
             total_score += allTeamStats[team][1]
-        player_scores.append(round(total_score + player_ID / 10000 + .00001,5))  # need to add .00001 to get rid of rounding and round() to get rid of floating points errors
+        player_scores.append(round(total_score + player_ID / 10000 + .00001, 5))  # need to add .00001 to get rid of rounding and round() to get rid of floating points errors
     # print(player_scores)
     player_scores.sort(reverse=True)
     # print(player_scores)
@@ -101,11 +101,13 @@ def weekly_winners():
 
     print("\nHighest scores:")
     for i in range(50):
-        print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
-
-    print("\nLowest scores:")
-    for i in range(len(player_scores) - 1, len(player_scores) - 20, -1):
-        print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
+        if week > 0 and week < 11:
+            print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1])) - 10}  Score: {int(player_scores[i])}") #Actual No. {int(str(player_scores[i])[-5:-1])}
+        else:
+            print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
+    #print("\nLowest scores:")
+    #for i in range(len(player_scores) - 1, len(player_scores) - 20, -1):
+    #    print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
 
 
 def create_tickets():
@@ -136,7 +138,7 @@ def create_tickets():
             pdf.set_y(teams_starting_y + teams_y_spacing * int(week / 6) - week_y)
             pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week / 6) - week_x)
             pdf.set_font('Arial', 'B', weeks_font_size)
-            pdf.cell(0, 0, "Week " + str(week), 0, 0, "L", False, "")
+            pdf.cell(0, 0, "Week " + str(week + 1), 0, 0, "L", False, "")
 
             # print(teams, end = "")
         # print()
@@ -212,7 +214,8 @@ def actualTicketNumber(ID):
     return (ID * jump + int(ID * jump / len(combinations))) % len(combinations)
 
 def displayNumber(ID):
-    return (ID - 1 * jump) % (len(combinations) - 1)
+    return int((ID + (ID%jump) * len(combinations))/jump) + 1
+
 
 
 def base_ticket(pdf):
