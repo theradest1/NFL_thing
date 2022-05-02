@@ -13,8 +13,8 @@ import os
 
 square = "Square.png"
 football = "Football.png"
-back = "C:\\Users\\18326\PycharmProjects\\first\\ticket_back.png"
-front = "C:\\Users\\18326\PycharmProjects\\first\\ticket_front.png"
+back = "ticket_back.png"
+front = "ticket_front.png"
 
 total_players = 4960
 weeks = 18
@@ -121,9 +121,9 @@ def create_tickets():
     pdf.image(back, 0, 0, 8.5, 2.75, 'PNG')  # - how to add an image
     print("Done")
     print("Creating teams page...")
-    for player_ID in range(total_players):
+    for player_ID in range(2): #total_players):
         base_ticket(pdf)
-        text(pdf, "Ticket No. " + str(player_ID + 1) + " Actual: " + str(actualTicketNumber(player_ID)), .5, .1, 7, '', 'L')
+        text(pdf, "Ticket No. " + str(player_ID + 1) , .5, .1, 7, '', 'L') # + " Actual: " + str(actualTicketNumber(player_ID))
         text(pdf, "Ticket No. " + str(player_ID + 1), 2.5, .6, 7, '', 'L')
         print("ticket made, ticket ID:", player_ID + 1)
         for week in range(weeks):
