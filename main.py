@@ -10,9 +10,6 @@ import os
 # greeting = tk.Label(text="Hello, Tkinter")
 # greeting.pack()
 
-
-square = "Square.png"
-football = "Football.png"
 back = "ticket_back.png"
 front = "ticket_front.png"
 
@@ -64,7 +61,7 @@ combinations = list(itertools.combinations(range(len(allTeamStats)), 3))  # gene
 comb_size = len(combinations)
 player_step = int(comb_size / total_players)
 week_step = int(comb_size / weeks)
-#print(week_step)
+print(week_step)
 
 
 # commands not done
@@ -95,16 +92,10 @@ def weekly_winners():
     # print(player_scores)
     player_scores.sort(reverse=True)
     # print(player_scores)
-    i = -1
-    j = -1
-    winners = []
 
     print("\nHighest scores:")
     for i in range(50):
-        if week > 0 and week < 11:
-            print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1])) - 10}  Score: {int(player_scores[i])}") #Actual No. {int(str(player_scores[i])[-5:-1])}
-        else:
-            print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
+        print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
     #print("\nLowest scores:")
     #for i in range(len(player_scores) - 1, len(player_scores) - 20, -1):
     #    print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
@@ -137,7 +128,7 @@ def create_tickets():
             pdf.cell(0, 0, ''.join(teams), 0, 0, "L", False, "")
             pdf.set_y(teams_starting_y + teams_y_spacing * int(week / 6) - week_y)
             pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week / 6) - week_x)
-            pdf.set_font('Arial', 'B', weeks_font_size)
+            pdf.set_font('Arial', 'BU', weeks_font_size)
             pdf.cell(0, 0, "Week " + str(week + 1), 0, 0, "L", False, "")
 
             # print(teams, end = "")
