@@ -74,19 +74,21 @@ def weekly_winners():
     week = int(input("What week (1-18): ")) - 1
     player_scores = []
     player_ID = -1
-
+    print(week_step)
+    print(week)
+    print(week * week_step)
     for i in range(len(combinations)):  # combination in combinations:
         player_ID += 1
         total_score = 0
-        if i + week * week_step >= len(combinations):
-            combination = combinations[i + week * week_step - len(combinations)]
-            print(i + week * week_step - len(combinations))
-        else:
-            combination = combinations[i + week * week_step]
-            print(i + week * week_step)
+        #if i + week * week_step >= len(combinations):
+        #    combination = combinations[i + week * week_step - len(combinations)]
+            #print(i + week * week_step - len(combinations))
+        #else:
+            #combination = combinations[i + week * week_step]
+            #print(i + week * week_step)
 
-        print(combination)
-        for team in combination:
+        #print(combination)
+        for team in combinations[i]:
             total_score += allTeamStats[team][1]
         player_scores.append(round(total_score + player_ID / 10000 + .00001, 5))  # need to add .00001 to get rid of rounding and round() to get rid of floating points errors
     # print(player_scores)
@@ -94,7 +96,7 @@ def weekly_winners():
     # print(player_scores)
 
     print("\nHighest scores:")
-    for i in range(50):
+    for i in range(100):
         print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
     #print("\nLowest scores:")
     #for i in range(len(player_scores) - 1, len(player_scores) - 20, -1):
