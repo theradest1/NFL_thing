@@ -6,6 +6,7 @@ from fpdf import FPDF
 import os
 #import tkinter as tk
 
+#2209
 # window = tk.Tk()
 # greeting = tk.Label(text="Hello, Tkinter")
 # greeting.pack()
@@ -74,9 +75,9 @@ def weekly_winners():
     week = int(input("What week (1-18): ")) - 1
     player_scores = []
     player_ID = -1
-    print(week_step)
-    print(week)
-    print(week * week_step)
+    #print(week_step)
+    #print(week)
+    #print(week * week_step)
     for i in range(len(combinations)):  # combination in combinations:
         player_ID += 1
         total_score = 0
@@ -97,7 +98,7 @@ def weekly_winners():
 
     print("\nHighest scores:")
     for i in range(100):
-        print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
+        print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
     #print("\nLowest scores:")
     #for i in range(len(player_scores) - 1, len(player_scores) - 20, -1):
     #    print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
@@ -114,7 +115,7 @@ def create_tickets():
     pdf.image(back, 0, 0, 8.5, 2.75, 'PNG')  # - how to add an image
     print("Done")
     print("Creating teams page...")
-    for player_ID in range(2): #total_players):
+    for player_ID in range(total_players):
         base_ticket(pdf)
         text(pdf, "Ticket No. " + str(player_ID + 1) , .5, .1, 7, '', 'L') # + " Actual: " + str(actualTicketNumber(player_ID))
         text(pdf, "Ticket No. " + str(player_ID + 1), 2.5, .6, 7, '', 'L')
@@ -206,8 +207,8 @@ def display_points():
 def actualTicketNumber(ID):
     return (ID * jump + int(ID * jump / len(combinations))) % len(combinations)
 
-def displayNumber(ID):
-    return int((ID + (ID%jump) * len(combinations))/jump) + 1
+def displayNumber(ID, week = 0):
+    return (int((ID + (ID%jump) * len(combinations))/jump) + 1 + week * 2209) % (len(combinations) - 1)
 
 
 
