@@ -4,12 +4,9 @@ from operator import itemgetter
 import math
 from fpdf import FPDF
 import os
-#import tkinter as tk
 
-#2209
-# window = tk.Tk()
-# greeting = tk.Label(text="Hello, Tkinter")
-# greeting.pack()
+#set_points - weekly score for each team,
+#weekly_winners - input week #
 
 back = "ticket_back.png"
 front = "ticket_front.png"
@@ -31,15 +28,15 @@ week_x = 0
 
 # SETUP -------------------------------------------------------------
 # [[name, score], [name, score]]
-allTeamStats = [["Arizona Cardinals", 10], ["Atlanta Falcons", 5], ["Baltimore Ravens", 2], ["Buffalo Bills", 0],
-                ["Carolina Panthers", 0], ["Chicago Bears", 0], ["Cincinnati Bengals", 0], ["Cleveland Browns", 0],
-                ["Dallas Cowboys", 0], ["Denver Broncos", 0], ["Detroit Lions", 0], ["Green Bay Packers", 0],
-                ["Houston Texans", 0], ["Indianapolis Colts", 0], ["Jacksonville Jaguars", 0],
-                ["Kansas City Chiefs", 0], ["Las Vegas Raiders", 0], ["Los Angeles Chargers", 0],
-                ["Los Angeles Rams", 0], ["Miami Dolphins", 0], ["Minnesota Vikings", 0], ["New England Patriots", 0],
-                ["New Orleans Saints", 0], ["New York Giants", 0], ["New York Jets", 0], ["Philadelphia Eagles", 0],
-                ["Pittsburgh Steelers", 0], ["San Francisco 49ers", 0], ["Seattle Seahawks", 0],
-                ["Tampa Bay Buccaneers", 0], ["Tennessee Titans", 0], ["Washington Football Team", 0]]
+allTeamStats = [["Arizona Cardinals", 29], ["Atlanta Falcons", 27], ["Baltimore Ravens", 38], ["Buffalo Bills", 41],
+                ["Carolina Panthers", 16], ["Chicago Bears", 10], ["Cincinnati Bengals", 17], ["Cleveland Browns", 30],
+                ["Dallas Cowboys", 20], ["Denver Broncos", 16], ["Detroit Lions", 36], ["Green Bay Packers", 27],
+                ["Houston Texans", 9], ["Indianapolis Colts", 0], ["Jacksonville Jaguars", 24],
+                ["Kansas City Chiefs", 27], ["Las Vegas Raiders", 23], ["Los Angeles Chargers", 24],
+                ["Los Angeles Rams", 31], ["Miami Dolphins", 42], ["Minnesota Vikings", 7], ["New England Patriots", 17],
+                ["New Orleans Saints", 10], ["New York Giants", 19], ["New York Jets", 31], ["Philadelphia Eagles", 24],
+                ["Pittsburgh Steelers", 14], ["San Francisco 49ers", 27], ["Seattle Seahawks", 7],
+                ["Tampa Bay Buccaneers", 20], ["Tennessee Titans", 7], ["Washington Football Team", 27]]
 
 team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills', 'Carolina Panthers',
               'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos',
@@ -52,8 +49,7 @@ team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffa
 abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
        'W', 'Y', 'X', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
 
-commands = ["lookup_player", "set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points",
-            "random_points", "disp_week_step", "disp_player_step", "help"]
+commands = ["set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "random_points", "disp_week_step", "disp_player_step", "help"]
 
 prizes = [500, 250, 100, 75, 50, 25, 10]
 
@@ -63,12 +59,6 @@ comb_size = len(combinations)
 player_step = int(comb_size / total_players)
 week_step = int(comb_size / weeks)
 print(week_step)
-
-
-# commands not done
-
-
-# commands being worked on
 
 
 def weekly_winners():
@@ -97,12 +87,12 @@ def weekly_winners():
     # print(player_scores)
 
     print("\nHighest scores:")
-    for i in range(100):
-        print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
-    #print("\nLowest scores:")
-    #for i in range(len(player_scores) - 1, len(player_scores) - 20, -1):
-    #    print(f"Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
-
+    for i in range(40):
+        print(f"{i + 1}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
+    print("\nLowest scores:")
+    for i in range(len(player_scores) - 1, len(player_scores) - 40, -1):
+        print(f"{total_players - i}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
+    #print(player_scores)
 
 def create_tickets():
     loop = 0
