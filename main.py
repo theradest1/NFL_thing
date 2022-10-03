@@ -78,7 +78,8 @@ def weekly_winners():
 
     print("\nHighest scores:")
     for i in range(40):
-        print(f"{i + 1}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}  Score: {int(player_scores[i])}, Teams: {combinations[int(str(player_scores[i])[-5:-1])]}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
+        #miniTeam = combinations[int(str(player_scores[i])[-5:-1])] - for when we want to display the teams (:
+        print(f"{i + 1}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
     print("\nLowest scores:")
     for i in range(len(player_scores) - 1, len(player_scores) - 41, -1):
         print(f"{total_players - i}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}, Score: {int(player_scores[i])}")
