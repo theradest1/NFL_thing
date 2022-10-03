@@ -28,15 +28,15 @@ week_x = 0
 
 # SETUP -------------------------------------------------------------
 # [[name, score], [name, score]]
-allTeamStats = [["Arizona Cardinals", 29], ["Atlanta Falcons", 27], ["Baltimore Ravens", 38], ["Buffalo Bills", 41],
-                ["Carolina Panthers", 16], ["Chicago Bears", 10], ["Cincinnati Bengals", 17], ["Cleveland Browns", 30],
-                ["Dallas Cowboys", 20], ["Denver Broncos", 16], ["Detroit Lions", 36], ["Green Bay Packers", 27],
-                ["Houston Texans", 9], ["Indianapolis Colts", 0], ["Jacksonville Jaguars", 24],
-                ["Kansas City Chiefs", 27], ["Las Vegas Raiders", 23], ["Los Angeles Chargers", 24],
-                ["Los Angeles Rams", 31], ["Miami Dolphins", 42], ["Minnesota Vikings", 7], ["New England Patriots", 17],
-                ["New Orleans Saints", 10], ["New York Giants", 19], ["New York Jets", 31], ["Philadelphia Eagles", 24],
-                ["Pittsburgh Steelers", 14], ["San Francisco 49ers", 27], ["Seattle Seahawks", 7],
-                ["Tampa Bay Buccaneers", 20], ["Tennessee Titans", 7], ["Washington Football Team", 27]]
+allTeamStats = [["Arizona Cardinals", 12], ["Atlanta Falcons", 27], ["Baltimore Ravens", 37], ["Buffalo Bills", 19],
+                ["Carolina Panthers", 22], ["Chicago Bears", 23], ["Cincinnati Bengals", 27], ["Cleveland Browns", 29],
+                ["Dallas Cowboys", 23], ["Denver Broncos", 11], ["Detroit Lions", 24], ["Green Bay Packers", 14],
+                ["Houston Texans", 20], ["Indianapolis Colts", 20], ["Jacksonville Jaguars", 38],
+                ["Kansas City Chiefs", 17], ["Las Vegas Raiders", 22], ["Los Angeles Chargers", 10],
+                ["Los Angeles Rams", 20], ["Miami Dolphins", 21], ["Minnesota Vikings", 28], ["New England Patriots", 26],
+                ["New Orleans Saints", 14], ["New York Giants", 16], ["New York Jets", 12], ["Philadelphia Eagles", 24],
+                ["Pittsburgh Steelers", 17], ["San Francisco 49ers", 10], ["Seattle Seahawks", 23],
+                ["Tampa Bay Buccaneers", 12], ["Tennessee Titans", 24], ["Washington Football Team", 8]]
 
 team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills', 'Carolina Panthers',
               'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos',
@@ -50,8 +50,6 @@ abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'
        'W', 'Y', 'X', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
 
 commands = ["set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "random_points", "disp_week_step", "disp_player_step", "help"]
-
-prizes = [500, 250, 100, 75, 50, 25, 10]
 
 combinations = list(itertools.combinations(range(len(allTeamStats)), 3))  # generate the list of all combinations
 
@@ -71,14 +69,6 @@ def weekly_winners():
     for i in range(len(combinations)):  # combination in combinations:
         player_ID += 1
         total_score = 0
-        #if i + week * week_step >= len(combinations):
-        #    combination = combinations[i + week * week_step - len(combinations)]
-            #print(i + week * week_step - len(combinations))
-        #else:
-            #combination = combinations[i + week * week_step]
-            #print(i + week * week_step)
-
-        #print(combination)
         for team in combinations[i]:
             total_score += allTeamStats[team][1]
         player_scores.append(round(total_score + player_ID / 10000 + .00001, 5))  # need to add .00001 to get rid of rounding and round() to get rid of floating points errors
@@ -88,10 +78,10 @@ def weekly_winners():
 
     print("\nHighest scores:")
     for i in range(40):
-        print(f"{i + 1}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
+        print(f"{i + 1}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}  Score: {int(player_scores[i])}, Teams: {combinations[int(str(player_scores[i])[-5:-1])]}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
     print("\nLowest scores:")
-    for i in range(len(player_scores) - 1, len(player_scores) - 40, -1):
-        print(f"{total_players - i}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]))}, Score: {int(player_scores[i])}")
+    for i in range(len(player_scores) - 1, len(player_scores) - 41, -1):
+        print(f"{total_players - i}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}, Score: {int(player_scores[i])}")
     #print(player_scores)
 
 def create_tickets():
@@ -199,8 +189,6 @@ def actualTicketNumber(ID):
 
 def displayNumber(ID, week = 0):
     return (int((ID + (ID%jump) * len(combinations))/jump) + 1 + week * 2209) % (len(combinations) - 1)
-
-
 
 def base_ticket(pdf):
     pdf.add_page()
