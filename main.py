@@ -108,7 +108,13 @@ def bottomIndexes(bigList, amount):
     return bottomIndexeList
 
 def getTicketInfo(ticketID, player_scores, week):
-    return "ticket with ID " + str(ticketID) + " has the score " + str(player_scores[ticketID]) + " with the team IDs " + str(combinations[ticketsInfo[ticketID][week]])
+    #getting teams
+    teams = ""
+    for teamID in combinations[ticketsInfo[ticketID][week]]:
+        teams += abc[teamID] + ", "
+    teams = teams[:-2]
+    #+1 is because ticketID starts from 0 and the printed tickets start from 1
+    return "ticket " + str(ticketID + 1) + " has the score " + str(player_scores[ticketID]) + " with the teams " + teams
 
 def weekly_winners():
     week = int(input("What week (1-18): ")) - 1
