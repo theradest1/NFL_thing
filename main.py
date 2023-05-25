@@ -21,6 +21,7 @@ def mixList(listToBeMixed):
 
 total_players = 4960
 weeks = 18
+playersToShow = 20
 ticketRandomSeed = 1
 random.seed(1)
 ticketsInfo = [[]]
@@ -45,23 +46,23 @@ week_x = 0
 
 # SETUP -------------------------------------------------------------
 # [[name, score], [name, score]]
-allTeamStats = [["Arizona Cardinals", 13], ["Atlanta Falcons", 30], ["Baltimore Ravens", 16], ["Buffalo Bills", 35],
-                ["Carolina Panthers", 10], ["Chicago Bears", 13], ["Cincinnati Bengals", 27], ["Cleveland Browns", 14],
-                ["Dallas Cowboys", 6], ["Denver Broncos", 31], ["Detroit Lions", 20], ["Green Bay Packers", 16],
-                ["Houston Texans", 32], ["Indianapolis Colts", 31], ["Jacksonville Jaguars", 20],
-                ["Kansas City Chiefs", 31], ["Las Vegas Raiders", 13], ["Los Angeles Chargers", 28],
-                ["Los Angeles Rams", 16], ["Miami Dolphins", 11], ["Minnesota Vikings", 29], ["New England Patriots", 23],
-                ["New Orleans Saints", 7], ["New York Giants", 16], ["New York Jets", 6], ["Philadelphia Eagles", 22],
-                ["Pittsburgh Steelers", 28], ["San Francisco 49ers", 38], ["Seattle Seahawks", 19],
-                ["Tampa Bay Buccaneers", 17], ["Tennessee Titans", 16], ["Washington Football Team", 26]]
+allTeamStats = [["Arizona Cardinals", 0], ["Atlanta Falcons", 0], ["Baltimore Ravens", 0], ["Buffalo Bills", 1],
+                ["Carolina Panthers", 1], ["Chicago Bears", 1], ["Cincinnati Bengals", 1], ["Cleveland Browns", 1],
+                ["Dallas Cowboys", 1], ["Denver Broncos", 1], ["Detroit Lions", 1], ["Green Bay Packers", 1],
+                ["Houston Texans", 1], ["Indianapolis Colts", 1], ["Jacksonville Jaguars", 1],
+                ["Kansas City Chiefs", 1], ["Las Vegas Raiders", 1], ["Los Angeles Chargers", 1],
+                ["Los Angeles Rams", 1], ["Miami Dolphins", 1], ["Minnesota Vikings", 1], ["New England Patriots", 1],
+                ["New Orleans Saints", 1], ["New York Giants", 1], ["New York Jets", 1], ["Philadelphia Eagles", 1],
+                ["Pittsburgh Steelers", 1], ["San Francisco 49ers", 1], ["Seattle Seahawks", 1],
+                ["Tampa Bay Buccaneers", 1], ["Tennessee Titans", 1], ["Washington Football Team", 1]]
 
 team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills', 'Carolina Panthers',
-              'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos',
-              'Detroit Lions', 'Green Bay Packers', 'Houston Texans', 'Indianapolis Colts', 'Jacksonville Jaguars',
-              'Kansas City Chiefs', 'Las Vegas Raiders', 'Los Angeles Chargers', 'Los Angeles Rams', 'Miami Dolphins',
-              'Minnesota Vikings', 'New England Patriots', 'New Orleans Saints', 'New York Giants', 'New York Jets',
-              'Philadelphia Eagles', 'Pittsburgh Steelers', 'San Francisco 49ers', 'Seattle Seahawks',
-              'Tampa Bay Buccaneers', 'Tennessee Titans', 'Washington Football Team']
+                'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos',
+                'Detroit Lions', 'Green Bay Packers', 'Houston Texans', 'Indianapolis Colts', 'Jacksonville Jaguars',
+                'Kansas City Chiefs', 'Las Vegas Raiders', 'Los Angeles Chargers', 'Los Angeles Rams', 'Miami Dolphins',
+                'Minnesota Vikings', 'New England Patriots', 'New Orleans Saints', 'New York Giants', 'New York Jets',
+                'Philadelphia Eagles', 'Pittsburgh Steelers', 'San Francisco 49ers', 'Seattle Seahawks',
+                'Tampa Bay Buccaneers', 'Tennessee Titans', 'Washington Football Team']
 
 abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
 
@@ -69,31 +70,67 @@ commands = ["set_points", "weekly_winners", "test_pdf", "create_tickets", "displ
 
 combinations = list(itertools.combinations(range(len(allTeamStats)), 3))  # generate the list of all combinations
 
+
+def topIndexes(bigList, amount):
+    topIndexeList = []
+    #setup list
+    for i in range(amount):
+        topIndexeList.append(i)
+    #find top
+    for i in range(len(bigList) - 1):
+        for j in range(len(topIndexeList)):
+            if bigList[i] > bigList[topIndexeList[j]] and not i in topIndexeList:
+                topIndexeList[j] = i
+            
+    #adding score duplicates
+    for i in range(len(bigList) - 1):
+        for j in range(len(topIndexeList)):
+            if bigList[i] == bigList[topIndexeList[j]] and not i in topIndexeList:
+                topIndexeList.insert(j, i)
+    return topIndexeList
+
+def bottomIndexes(bigList, amount):
+    bottomIndexeList = []
+    #setup list
+    for i in range(amount):
+        bottomIndexeList.append(i)
+    #find top
+    for i in range(len(bigList) - 1):
+        for j in range(len(bottomIndexeList)):
+            if bigList[i] < bigList[bottomIndexeList[j]] and not i in bottomIndexeList:
+                bottomIndexeList[j] = i
+            
+    #adding score duplicates
+    for i in range(len(bigList) - 1):
+        for j in range(len(bottomIndexeList)):
+            if bigList[i] == bigList[bottomIndexeList[j]] and not i in bottomIndexeList:
+                bottomIndexeList.insert(j, i)
+    return bottomIndexeList
+
+def getTicketInfo(ticketID, player_scores, week):
+    return "ticket with ID " + str(ticketID) + " has the score " + str(player_scores[ticketID]) + " with the team IDs " + str(combinations[ticketsInfo[ticketID][week]])
+
 def weekly_winners():
     week = int(input("What week (1-18): ")) - 1
     player_scores = []
-    player_ID = -1
     #print(week_step)
     #print(week)
     #print(week * week_step)
-    for i in range(len(combinations)):  # combination in combinations:
-        player_ID += 1
-        total_score = 0
-        for team in combinations[i]:
-            total_score += allTeamStats[team][1]
-        player_scores.append(round(total_score + player_ID / 10000 + .00001, 5))  # need to add .00001 to get rid of rounding and round() to get rid of floating points errors
-    # print(player_scores)
-    player_scores.sort(reverse=True)
-    # print(player_scores)
-
+    for playerID in range(total_players):
+        score = 0
+        for team in combinations[ticketsInfo[playerID][week]]:
+            score += allTeamStats[team][1] #1 because that is the index of the score of that team
+        player_scores.append(score)
+        
+    winners = topIndexes(player_scores, playersToShow)
+    losers = bottomIndexes(player_scores, playersToShow)
     print("\nHighest scores:")
-    for i in range(40):
-        #miniTeam = combinations[int(str(player_scores[i])[-5:-1])] - for when we want to display the teams (:
-        print(f"{i + 1}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}  Score: {int(player_scores[i])}")  # Actual No. {int(str(player_scores[i])[-5:-1])}
+    for winner in winners:
+        print(getTicketInfo(winner, player_scores, week))
+        
     print("\nLowest scores:")
-    for i in range(len(player_scores) - 1, len(player_scores) - 41, -1):
-        print(f"{total_players - i}. Ticket No. {displayNumber(int(str(player_scores[i])[-5:-1]), week)}, Score: {int(player_scores[i])}")
-    #print(player_scores)
+    for loser in losers:
+        print(getTicketInfo(loser, player_scores, week))
 
 def create_tickets():
     print(ticketsInfo)
@@ -131,7 +168,7 @@ def create_tickets():
     delete_past_pdf("tickets.pdf")
     name = input(
         "Enter the path and name you want it to have (example: C:\\\\Users\\\\lando\\\\OneDrive\\\\Documents\\\\GitRepos\\\\NFL_thing\\\\final_tickets.pdf): ")
-    print("Exporting...")
+    print("Exporting... (this takes a while)")
     pdf.output(name, 'F')
     print("Done")
 
