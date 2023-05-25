@@ -5,16 +5,33 @@ import math
 from fpdf import FPDF
 import os
 
-#set_points - weekly score for each team,
+#display_points - weekly score for each team,
 #weekly_winners - input week #
 
 back = "ticket_back.png"
 front = "ticket_front.png"
 
+def mixList(listToBeMixed):
+    for i in range(len(listToBeMixed)):
+        newIndex = random.randint(0, len(listToBeMixed) - 1)
+        temp = listToBeMixed[i]
+        listToBeMixed[i] = listToBeMixed[newIndex]
+        listToBeMixed[newIndex] = temp
+    return listToBeMixed
+
 total_players = 4960
 weeks = 18
-
-jump = 496
+ticketRandomSeed = 1
+random.seed(1)
+ticketsInfo = [[]]
+for i in range(total_players - 1): #-2 because it already has a list element in it
+    ticketsInfo.append([])
+for week in range(weeks):
+    weekIDs = list(range(total_players))
+    weekIDs = mixList(weekIDs)
+    for playerID in range(total_players):
+        randID = random.randint(0, len(weekIDs) - 1)
+        ticketsInfo[playerID].append(weekIDs.pop(randID))
 
 teams_x_spacing = .6
 teams_y_spacing = .6
@@ -28,15 +45,15 @@ week_x = 0
 
 # SETUP -------------------------------------------------------------
 # [[name, score], [name, score]]
-allTeamStats = [["Arizona Cardinals", 12], ["Atlanta Falcons", 27], ["Baltimore Ravens", 37], ["Buffalo Bills", 19],
-                ["Carolina Panthers", 22], ["Chicago Bears", 23], ["Cincinnati Bengals", 27], ["Cleveland Browns", 29],
-                ["Dallas Cowboys", 23], ["Denver Broncos", 11], ["Detroit Lions", 24], ["Green Bay Packers", 14],
-                ["Houston Texans", 20], ["Indianapolis Colts", 20], ["Jacksonville Jaguars", 38],
-                ["Kansas City Chiefs", 17], ["Las Vegas Raiders", 22], ["Los Angeles Chargers", 10],
-                ["Los Angeles Rams", 20], ["Miami Dolphins", 21], ["Minnesota Vikings", 28], ["New England Patriots", 26],
-                ["New Orleans Saints", 14], ["New York Giants", 16], ["New York Jets", 12], ["Philadelphia Eagles", 24],
-                ["Pittsburgh Steelers", 17], ["San Francisco 49ers", 10], ["Seattle Seahawks", 23],
-                ["Tampa Bay Buccaneers", 12], ["Tennessee Titans", 24], ["Washington Football Team", 8]]
+allTeamStats = [["Arizona Cardinals", 13], ["Atlanta Falcons", 30], ["Baltimore Ravens", 16], ["Buffalo Bills", 35],
+                ["Carolina Panthers", 10], ["Chicago Bears", 13], ["Cincinnati Bengals", 27], ["Cleveland Browns", 14],
+                ["Dallas Cowboys", 6], ["Denver Broncos", 31], ["Detroit Lions", 20], ["Green Bay Packers", 16],
+                ["Houston Texans", 32], ["Indianapolis Colts", 31], ["Jacksonville Jaguars", 20],
+                ["Kansas City Chiefs", 31], ["Las Vegas Raiders", 13], ["Los Angeles Chargers", 28],
+                ["Los Angeles Rams", 16], ["Miami Dolphins", 11], ["Minnesota Vikings", 29], ["New England Patriots", 23],
+                ["New Orleans Saints", 7], ["New York Giants", 16], ["New York Jets", 6], ["Philadelphia Eagles", 22],
+                ["Pittsburgh Steelers", 28], ["San Francisco 49ers", 38], ["Seattle Seahawks", 19],
+                ["Tampa Bay Buccaneers", 17], ["Tennessee Titans", 16], ["Washington Football Team", 26]]
 
 team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills', 'Carolina Panthers',
               'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos',
@@ -46,18 +63,11 @@ team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffa
               'Philadelphia Eagles', 'Pittsburgh Steelers', 'San Francisco 49ers', 'Seattle Seahawks',
               'Tampa Bay Buccaneers', 'Tennessee Titans', 'Washington Football Team']
 
-abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-       'W', 'Y', 'X', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
+abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
 
 commands = ["set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "random_points", "disp_week_step", "disp_player_step", "help"]
 
 combinations = list(itertools.combinations(range(len(allTeamStats)), 3))  # generate the list of all combinations
-
-comb_size = len(combinations)
-player_step = int(comb_size / total_players)
-week_step = int(comb_size / weeks)
-print(week_step)
-
 
 def weekly_winners():
     week = int(input("What week (1-18): ")) - 1
@@ -86,25 +96,24 @@ def weekly_winners():
     #print(player_scores)
 
 def create_tickets():
+    print(ticketsInfo)
     loop = 0
     print("Setting up pdf...")
     pdf = FPDF("P", "in", (8.5, 2.75))
     pdf.set_auto_page_break(0)
-    print("Done")
     print("Creating information page...")
     pdf.add_page()
     pdf.image(back, 0, 0, 8.5, 2.75, 'PNG')  # - how to add an image
-    print("Done")
     print("Creating teams page...")
     for player_ID in range(total_players):
         base_ticket(pdf)
         text(pdf, "Ticket No. " + str(player_ID + 1) , .5, .1, 7, '', 'L') # + " Actual: " + str(actualTicketNumber(player_ID))
         text(pdf, "Ticket No. " + str(player_ID + 1), 2.5, .6, 7, '', 'L')
-        print("ticket made, ticket ID:", player_ID + 1)
+        weeklyCombinations = ticketsInfo[player_ID]
         for week in range(weeks):
             teams = []
             # print(player_ID * player_step + week * week_step)
-            for team_ID in combinations[(actualTicketNumber(player_ID) * player_step + week * week_step)%(len(combinations) - 1)]:
+            for team_ID in combinations[weeklyCombinations[week]]:
                 teams.append(''.join(abc[team_ID]))
             pdf.set_y(teams_starting_y + teams_y_spacing * int(week / 6))
             pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week / 6))
@@ -115,12 +124,13 @@ def create_tickets():
             pdf.set_font('Arial', 'BU', weeks_font_size)
             pdf.cell(0, 0, "Week " + str(week + 1), 0, 0, "L", False, "")
 
+        print("ticket with ID of ", player_ID + 1, " made")
             # print(teams, end = "")
         # print()
     print("Done")
     delete_past_pdf("tickets.pdf")
     name = input(
-        "Enter the path and name you want it to have (example: C:\\\\Users\\\\18326\\\\Desktop\\\\tickets.pdf): ")
+        "Enter the path and name you want it to have (example: C:\\\\Users\\\\lando\\\\OneDrive\\\\Documents\\\\GitRepos\\\\NFL_thing\\\\final_tickets.pdf): ")
     print("Exporting...")
     pdf.output(name, 'F')
     print("Done")
@@ -182,14 +192,6 @@ def set_points():
 def display_points():
     for team in allTeamStats:
         print(str("{}: {}").format(team[0], team[1]))
-
-
-# end of commands -------------------
-def actualTicketNumber(ID):
-    return (ID * jump + int(ID * jump / len(combinations))) % len(combinations)
-
-def displayNumber(ID, week = 0):
-    return (int((ID + (ID%jump) * len(combinations))/jump) + 1 + week * 2209) % (len(combinations) - 1)
 
 def base_ticket(pdf):
     pdf.add_page()
