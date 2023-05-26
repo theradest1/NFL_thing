@@ -66,7 +66,7 @@ team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffa
 
 abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
 
-commands = ["set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "random_points", "disp_week_step", "disp_player_step", "help"]
+commands = ["set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "random_points", "disp_week_step", "disp_player_step", "help", "test_rotated_text"]
 
 combinations = list(itertools.combinations(range(len(allTeamStats)), 3))  # generate the list of all combinations
 
@@ -107,6 +107,12 @@ def bottomIndexes(bigList, amount):
                 bottomIndexeList.insert(j, i)
     return bottomIndexeList
 
+def getAstheticNumbers(num, digits):
+    numInString = str(num)
+    while len(numInString) < digits:
+        numInString = "0" + numInString
+    return numInString
+
 def getTicketInfo(ticketID, player_scores, week):
     #getting teams
     teams = ""
@@ -139,7 +145,6 @@ def weekly_winners():
         print(getTicketInfo(loser, player_scores, week))
 
 def create_tickets():
-    print(ticketsInfo)
     loop = 0
     print("Setting up pdf...")
     pdf = FPDF("P", "in", (8.5, 2.75))
@@ -150,8 +155,9 @@ def create_tickets():
     print("Creating teams page...")
     for player_ID in range(total_players):
         base_ticket(pdf)
-        text(pdf, "Ticket No. " + str(player_ID + 1) , .5, .1, 7, '', 'L') # + " Actual: " + str(actualTicketNumber(player_ID))
-        text(pdf, "Ticket No. " + str(player_ID + 1), 2.5, .6, 7, '', 'L')
+        ticketIDWithZeros = getAstheticNumbers(player_ID + 1, 4)
+        text(pdf, "No. " + ticketIDWithZeros , .5, .15, 12, '', 'L') # + " Actual: " + str(actualTicketNumber(player_ID))
+        text(pdf, "No. " + ticketIDWithZeros, 2.5, .6, 12, '', 'L')
         weeklyCombinations = ticketsInfo[player_ID]
         for week in range(weeks):
             teams = []
@@ -266,8 +272,7 @@ def delete_past_pdf(pdf):
         print("Deleting past pdf...")
         os.remove(pdf)
         print("Done")
-
-
+    
 inp = ""
 while inp != "done":
     if len(inp.split()) > 0:
