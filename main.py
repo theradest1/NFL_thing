@@ -156,8 +156,11 @@ def create_tickets():
     for player_ID in range(total_players):
         base_ticket(pdf)
         ticketIDWithZeros = getAstheticNumbers(player_ID + 1, 4)
-        text(pdf, "No. " + ticketIDWithZeros , .5, .15, 12, '', 'L') # + " Actual: " + str(actualTicketNumber(player_ID))
-        text(pdf, "No. " + ticketIDWithZeros, 2.5, .6, 12, '', 'L')
+        text(pdf, "No.", .5, .15, 7, '', 'L')
+        text(pdf, "No.", 2.5, .6, 7, '', 'L')
+        text(pdf, ticketIDWithZeros, .67, .15, 12, '', 'L')
+        text(pdf, ticketIDWithZeros, 2.67, .6, 12, '', 'L')
+        
         weeklyCombinations = ticketsInfo[player_ID]
         for week in range(weeks):
             teams = []
