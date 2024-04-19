@@ -1,15 +1,13 @@
 import random
 import itertools
-from operator import itemgetter
-import math
 from fpdf import FPDF
 import os
 
 #display_points - weekly score for each team,
 #weekly_winners - input week #
 
-back = "ticket_back.png"
-front = "ticket_front.png"
+back = "ticket_back_4_19_24.png"
+front = "ticket_front_4_19_24.png"
 
 def mixList(listToBeMixed):
     for i in range(len(listToBeMixed)):
@@ -22,7 +20,7 @@ def mixList(listToBeMixed):
 total_players = 4960
 weeks = 18
 playersToShow = 20
-ticketRandomSeed = 1
+ticketRandomSeed = 2
 random.seed(1)
 ticketsInfo = [[]]
 for i in range(total_players - 1): #-2 because it already has a list element in it
