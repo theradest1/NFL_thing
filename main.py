@@ -21,7 +21,7 @@ total_players = 4960
 weeks = 18
 playersToShow = 20
 ticketRandomSeed = 2
-random.seed(1)
+random.seed(2)
 ticketsInfo = [[]]
 for i in range(total_players - 1): #-2 because it already has a list element in it
     ticketsInfo.append([])
