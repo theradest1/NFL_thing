@@ -6,8 +6,9 @@ import os
 #display_points - weekly score for each team,
 #weekly_winners - input week #
 
-back = "ticket_back_4_19_24.png"
-front = "ticket_front_4_19_24.png"
+back = "ticket_back_4-19-24.png"
+front = "ticket_front_5-6-24.png"
+
 
 def mixList(listToBeMixed):
     for i in range(len(listToBeMixed)):
@@ -17,13 +18,14 @@ def mixList(listToBeMixed):
         listToBeMixed[newIndex] = temp
     return listToBeMixed
 
+
 total_players = 4960
 weeks = 18
 playersToShow = 20
-ticketRandomSeed = 2
 random.seed(2)
 ticketsInfo = [[]]
-for i in range(total_players - 1): #-2 because it already has a list element in it
+for i in range(total_players -
+               1):  #-2 because it already has a list element in it
     ticketsInfo.append([])
 for week in range(weeks):
     weekIDs = list(range(total_players))
@@ -44,29 +46,51 @@ week_x = 0
 
 # SETUP -------------------------------------------------------------
 # [[name, score], [name, score]]
-allTeamStats = [["Arizona Cardinals", 0], ["Atlanta Falcons", 0], ["Baltimore Ravens", 0], ["Buffalo Bills", 1],
-                ["Carolina Panthers", 1], ["Chicago Bears", 1], ["Cincinnati Bengals", 1], ["Cleveland Browns", 1],
-                ["Dallas Cowboys", 1], ["Denver Broncos", 1], ["Detroit Lions", 1], ["Green Bay Packers", 1],
-                ["Houston Texans", 1], ["Indianapolis Colts", 1], ["Jacksonville Jaguars", 1],
-                ["Kansas City Chiefs", 1], ["Las Vegas Raiders", 1], ["Los Angeles Chargers", 1],
-                ["Los Angeles Rams", 1], ["Miami Dolphins", 1], ["Minnesota Vikings", 1], ["New England Patriots", 1],
-                ["New Orleans Saints", 1], ["New York Giants", 1], ["New York Jets", 1], ["Philadelphia Eagles", 1],
-                ["Pittsburgh Steelers", 1], ["San Francisco 49ers", 1], ["Seattle Seahawks", 1],
-                ["Tampa Bay Buccaneers", 1], ["Tennessee Titans", 1], ["Washington Football Team", 1]]
+allTeamStats = [["Arizona Cardinals", 0], ["Atlanta Falcons", 0],
+                ["Baltimore Ravens", 0], ["Buffalo Bills", 1],
+                ["Carolina Panthers", 1], ["Chicago Bears", 1],
+                ["Cincinnati Bengals", 1], ["Cleveland Browns", 1],
+                ["Dallas Cowboys", 1], ["Denver Broncos", 1],
+                ["Detroit Lions", 1], ["Green Bay Packers", 1],
+                ["Houston Texans", 1], ["Indianapolis Colts", 1],
+                ["Jacksonville Jaguars", 1], ["Kansas City Chiefs", 1],
+                ["Las Vegas Raiders", 1], ["Los Angeles Chargers", 1],
+                ["Los Angeles Rams", 1], ["Miami Dolphins", 1],
+                ["Minnesota Vikings", 1], ["New England Patriots", 1],
+                ["New Orleans Saints", 1], ["New York Giants", 1],
+                ["New York Jets", 1], ["Philadelphia Eagles", 1],
+                ["Pittsburgh Steelers", 1], ["San Francisco 49ers", 1],
+                ["Seattle Seahawks", 1], ["Tampa Bay Buccaneers", 1],
+                ["Tennessee Titans", 1], ["Washington Football Team", 1]]
 
-team_names = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills', 'Carolina Panthers',
-                'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos',
-                'Detroit Lions', 'Green Bay Packers', 'Houston Texans', 'Indianapolis Colts', 'Jacksonville Jaguars',
-                'Kansas City Chiefs', 'Las Vegas Raiders', 'Los Angeles Chargers', 'Los Angeles Rams', 'Miami Dolphins',
-                'Minnesota Vikings', 'New England Patriots', 'New Orleans Saints', 'New York Giants', 'New York Jets',
-                'Philadelphia Eagles', 'Pittsburgh Steelers', 'San Francisco 49ers', 'Seattle Seahawks',
-                'Tampa Bay Buccaneers', 'Tennessee Titans', 'Washington Football Team']
+team_names = [
+    'Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens',
+    'Buffalo Bills', 'Carolina Panthers', 'Chicago Bears',
+    'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys',
+    'Denver Broncos', 'Detroit Lions', 'Green Bay Packers', 'Houston Texans',
+    'Indianapolis Colts', 'Jacksonville Jaguars', 'Kansas City Chiefs',
+    'Las Vegas Raiders', 'Los Angeles Chargers', 'Los Angeles Rams',
+    'Miami Dolphins', 'Minnesota Vikings', 'New England Patriots',
+    'New Orleans Saints', 'New York Giants', 'New York Jets',
+    'Philadelphia Eagles', 'Pittsburgh Steelers', 'San Francisco 49ers',
+    'Seattle Seahawks', 'Tampa Bay Buccaneers', 'Tennessee Titans',
+    'Washington Football Team'
+]
 
-abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f']
+abc = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
+    'e', 'f'
+]
 
-commands = ["set_points", "weekly_winners", "test_pdf", "create_tickets", "display_points", "random_points", "disp_week_step", "disp_player_step", "help", "test_rotated_text"]
+commands = [
+    "set_points", "weekly_winners", "test_pdf", "create_tickets",
+    "display_points", "random_points", "disp_week_step", "disp_player_step",
+    "help", "test_rotated_text"
+]
 
-combinations = list(itertools.combinations(range(len(allTeamStats)), 3))  # generate the list of all combinations
+combinations = list(itertools.combinations(range(
+    len(allTeamStats)), 3))  # generate the list of all combinations
 
 
 def topIndexes(bigList, amount):
@@ -77,15 +101,18 @@ def topIndexes(bigList, amount):
     #find top
     for i in range(len(bigList) - 1):
         for j in range(len(topIndexeList)):
-            if bigList[i] > bigList[topIndexeList[j]] and not i in topIndexeList:
+            if bigList[i] > bigList[
+                    topIndexeList[j]] and not i in topIndexeList:
                 topIndexeList[j] = i
-            
+
     #adding score duplicates
     for i in range(len(bigList) - 1):
         for j in range(len(topIndexeList)):
-            if bigList[i] == bigList[topIndexeList[j]] and not i in topIndexeList:
+            if bigList[i] == bigList[
+                    topIndexeList[j]] and not i in topIndexeList:
                 topIndexeList.insert(j, i)
     return topIndexeList
+
 
 def bottomIndexes(bigList, amount):
     bottomIndexeList = []
@@ -95,21 +122,25 @@ def bottomIndexes(bigList, amount):
     #find top
     for i in range(len(bigList) - 1):
         for j in range(len(bottomIndexeList)):
-            if bigList[i] < bigList[bottomIndexeList[j]] and not i in bottomIndexeList:
+            if bigList[i] < bigList[
+                    bottomIndexeList[j]] and not i in bottomIndexeList:
                 bottomIndexeList[j] = i
-            
+
     #adding score duplicates
     for i in range(len(bigList) - 1):
         for j in range(len(bottomIndexeList)):
-            if bigList[i] == bigList[bottomIndexeList[j]] and not i in bottomIndexeList:
+            if bigList[i] == bigList[
+                    bottomIndexeList[j]] and not i in bottomIndexeList:
                 bottomIndexeList.insert(j, i)
     return bottomIndexeList
+
 
 def getAstheticNumbers(num, digits):
     numInString = str(num)
     while len(numInString) < digits:
         numInString = "0" + numInString
     return numInString
+
 
 def getTicketInfo(ticketID, player_scores, week):
     #getting teams
@@ -118,7 +149,9 @@ def getTicketInfo(ticketID, player_scores, week):
         teams += abc[teamID] + ", "
     teams = teams[:-2]
     #+1 is because ticketID starts from 0 and the printed tickets start from 1
-    return "ticket " + str(ticketID + 1) + " has the score " + str(player_scores[ticketID]) + " with the teams " + teams
+    return "ticket " + str(ticketID + 1) + " has the score " + str(
+        player_scores[ticketID]) + " with the teams " + teams
+
 
 def weekly_winners():
     week = int(input("What week (1-18): ")) - 1
@@ -129,18 +162,20 @@ def weekly_winners():
     for playerID in range(total_players):
         score = 0
         for team in combinations[ticketsInfo[playerID][week]]:
-            score += allTeamStats[team][1] #1 because that is the index of the score of that team
+            score += allTeamStats[team][
+                1]  #1 because that is the index of the score of that team
         player_scores.append(score)
-        
+
     winners = topIndexes(player_scores, playersToShow)
     losers = bottomIndexes(player_scores, playersToShow)
     print("\nHighest scores:")
     for winner in winners:
         print(getTicketInfo(winner, player_scores, week))
-        
+
     print("\nLowest scores:")
     for loser in losers:
         print(getTicketInfo(loser, player_scores, week))
+
 
 def create_tickets():
     loop = 0
@@ -158,7 +193,7 @@ def create_tickets():
         text(pdf, "No.", 2.5, .6, 7, '', 'L')
         text(pdf, ticketIDWithZeros, .67, .15, 12, '', 'L')
         text(pdf, ticketIDWithZeros, 2.67, .6, 12, '', 'L')
-        
+
         weeklyCombinations = ticketsInfo[player_ID]
         for week in range(weeks):
             teams = []
@@ -166,21 +201,25 @@ def create_tickets():
             for team_ID in combinations[weeklyCombinations[week]]:
                 teams.append(''.join(abc[team_ID]))
             pdf.set_y(teams_starting_y + teams_y_spacing * int(week / 6))
-            pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week / 6))
+            pdf.set_x(teams_starting_x + week * teams_x_spacing -
+                      teams_x_spacing * 6 * int(week / 6))
             pdf.set_font('Arial', 'B', teams_font_size)
             pdf.cell(0, 0, ''.join(teams), 0, 0, "L", False, "")
-            pdf.set_y(teams_starting_y + teams_y_spacing * int(week / 6) - week_y)
-            pdf.set_x(teams_starting_x + week * teams_x_spacing - teams_x_spacing * 6 * int(week / 6) - week_x)
+            pdf.set_y(teams_starting_y + teams_y_spacing * int(week / 6) -
+                      week_y)
+            pdf.set_x(teams_starting_x + week * teams_x_spacing -
+                      teams_x_spacing * 6 * int(week / 6) - week_x)
             pdf.set_font('Arial', 'BU', weeks_font_size)
             pdf.cell(0, 0, "Week " + str(week + 1), 0, 0, "L", False, "")
 
         print("ticket with ID of ", player_ID + 1, " made")
-            # print(teams, end = "")
+        # print(teams, end = "")
         # print()
     print("Done")
     delete_past_pdf("tickets.pdf")
     name = input(
-        "Enter the path and name you want it to have (example: C:\\\\Users\\\\lando\\\\OneDrive\\\\Documents\\\\GitRepos\\\\NFL_thing\\\\final_tickets.pdf): ")
+        "Enter the path and name you want it to have (example: C:\\\\Users\\\\lando\\\\OneDrive\\\\Documents\\\\GitRepos\\\\NFL_thing\\\\final_tickets.pdf): "
+    )
     print("Exporting... (this takes a while)")
     pdf.output(name, 'F')
     print("Done")
@@ -243,6 +282,7 @@ def display_points():
     for team in allTeamStats:
         print(str("{}: {}").format(team[0], team[1]))
 
+
 def base_ticket(pdf):
     pdf.add_page()
     pdf.set_fill_color(255, 255, 255)
@@ -273,7 +313,8 @@ def delete_past_pdf(pdf):
         print("Deleting past pdf...")
         os.remove(pdf)
         print("Done")
-    
+
+
 inp = ""
 while inp != "done":
     if len(inp.split()) > 0:
