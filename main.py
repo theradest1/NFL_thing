@@ -8,6 +8,7 @@ import os
 
 back = "ticket_back_4-19-24.png"
 front = "ticket_front_5-6-24.png"
+randomInfoFile = "random_info.txt"
 
 
 def mixList(listToBeMixed):
@@ -18,22 +19,26 @@ def mixList(listToBeMixed):
         listToBeMixed[newIndex] = temp
     return listToBeMixed
 
+def generateRandomTicketInfo(seed):
+    random.seed(seed)
+    ticketsInfo = [[]]
+    for i in range(total_players - 1):  #-1 because it already has a list element in it
+        ticketsInfo.append([])
+    for week in range(weeks):
+        weekIDs = list(range(total_players))
+        weekIDs = mixList(weekIDs)
+        for playerID in range(total_players):
+            randID = random.randint(0, len(weekIDs) - 1)
+            ticketsInfo[playerID].append(weekIDs.pop(randID))
+    return ticketsInfo
+
 
 total_players = 4960
 weeks = 18
 playersToShow = 20
-random.seed(2)
-ticketsInfo = [[]]
-for i in range(total_players -
-               1):  #-2 because it already has a list element in it
-    ticketsInfo.append([])
-for week in range(weeks):
-    weekIDs = list(range(total_players))
-    weekIDs = mixList(weekIDs)
-    for playerID in range(total_players):
-        randID = random.randint(0, len(weekIDs) - 1)
-        ticketsInfo[playerID].append(weekIDs.pop(randID))
+ticketsInfoLoaded = False
 
+#pdf settings
 teams_x_spacing = .6
 teams_y_spacing = .6
 teams_starting_y = 1.2
@@ -85,8 +90,8 @@ abc = [
 
 commands = [
     "set_points", "weekly_winners", "test_pdf", "create_tickets",
-    "display_points", "random_points", "disp_week_step", "disp_player_step",
-    "help", "test_rotated_text"
+    "display_points", "random_points",
+    "help", "test_rotated_text", "load_randoms", "set_seed"
 ]
 
 combinations = list(itertools.combinations(range(
@@ -156,9 +161,6 @@ def getTicketInfo(ticketID, player_scores, week):
 def weekly_winners():
     week = int(input("What week (1-18): ")) - 1
     player_scores = []
-    #print(week_step)
-    #print(week)
-    #print(week * week_step)
     for playerID in range(total_players):
         score = 0
         for team in combinations[ticketsInfo[playerID][week]]:
@@ -178,6 +180,9 @@ def weekly_winners():
 
 
 def create_tickets():
+    if ticketsInfoLoaded == False:
+        print("Ticket info hasn't been loaded")
+        return
     loop = 0
     print("Setting up pdf...")
     pdf = FPDF("P", "in", (8.5, 2.75))
@@ -197,7 +202,6 @@ def create_tickets():
         weeklyCombinations = ticketsInfo[player_ID]
         for week in range(weeks):
             teams = []
-            # print(player_ID * player_step + week * week_step)
             for team_ID in combinations[weeklyCombinations[week]]:
                 teams.append(''.join(abc[team_ID]))
             pdf.set_y(teams_starting_y + teams_y_spacing * int(week / 6))
@@ -225,14 +229,6 @@ def create_tickets():
     print("Done")
 
 
-def disp_player_step():
-    print(player_step)
-
-
-def disp_week_step():
-    print(week_step)
-
-
 def help():
     print("Commands: ", end="")
     for command in commands:
@@ -241,16 +237,35 @@ def help():
             print(", ", end="")
     print()
 
+def save_randoms(ticketsInfo):
+    with open(randomInfoFile, 'w') as file:
+        for ticket in ticketsInfo:
+            for number in ticket:
+                file.write(str(number) + ' ')
+            file.write('\n')
 
-def lookup_player():
-    player_ID = int(input("Ticket No. "))
-    print()
-    for week in range(0, weeks):
-        print("Week", week)
-        for team in combinations[player_ID * player_step + week * week_step]:
-            print(*allTeamStats[team])
-        print()
+def load_randoms():
+    global ticketsInfo, ticketsInfoLoaded
+    ticketsInfo = []
+    try:
+        with open(randomInfoFile, 'r') as file:
+            for line in file:
+                ticket = [int(item) for item in line.strip().split()]
+                ticketsInfo.append(ticket)
+    except FileNotFoundError:
+        print("Random info has not been generated yet, use set_seed to generate it")
+    
+    ticketsInfoLoaded = True
 
+def set_seed():
+    seed = int(input("Seed: "))
+    print("Generating random info...")
+    ticketsInfo = generateRandomTicketInfo(seed)
+    print("Saving random info to file...")
+    save_randoms(ticketsInfo)
+    print("Loading random info...")
+    load_randoms()
+    
 
 def test_pdf():
     pdfs = int(input("How many (all in one pdf): "))
@@ -314,7 +329,7 @@ def delete_past_pdf(pdf):
         os.remove(pdf)
         print("Done")
 
-
+load_randoms()
 inp = ""
 while inp != "done":
     if len(inp.split()) > 0:
