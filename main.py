@@ -37,7 +37,7 @@ def generateRandomTicketInfo(seed):
 
 total_players = 4960
 weeks = 18
-playersToShow = 20
+playersToShow = 10
 ticketsInfoLoaded = False
 
 #pdf settings
@@ -93,7 +93,7 @@ abc = [
 commands = [
     "set_points", "weekly_winners", "test_pdf", "create_tickets",
     "display_points", "random_points", "help", "test_rotated_text",
-    "load_randoms", "set_seed"
+    "load_randoms", "set_seed", "player_info", "team_comb_lookup"
 ]
 
 combinations = list(itertools.combinations(range(
@@ -165,19 +165,56 @@ def weekly_winners():
     for playerID in range(total_players):
         score = 0
         for team in combinations[ticketsInfo[playerID][week]]:
-            score += allTeamStats[team][
-                1]  #1 because that is the index of the score of that team
+            score += allTeamStats[team][1]  #1 because that is the index of the score of that team
         player_scores.append(score)
 
     winners = topIndexes(player_scores, playersToShow)
     losers = bottomIndexes(player_scores, playersToShow)
+    
     print("\nHighest scores:")
+    i = 1
     for winner in winners:
-        print(getTicketInfo(winner, player_scores, week))
+        print(f"{i}. " + getTicketInfo(winner, player_scores, week))
+        i += 1
 
     print("\nLowest scores:")
+    i = 1
     for loser in losers:
-        print(getTicketInfo(loser, player_scores, week))
+        print(f"{i}. " + getTicketInfo(loser, player_scores, week))
+        i += 1
+        
+def player_info():
+    ticketID = int(input("\nTicket ID: ")) - 1
+    print("")
+    
+    for week in range(18):
+        #getting score
+        score = 0
+        for team in combinations[ticketsInfo[ticketID][week]]:
+            score += allTeamStats[team][1]  #1 because that is the index of the score of that team
+        
+        #getting teams
+        teams = ""
+        for teamID in combinations[ticketsInfo[ticketID][week]]:
+            teams += abc[teamID] + ", "
+        teams = teams[:-2]
+        
+        print(f"Week: {week + 1}, Score: {score}, Teams: {teams}")
+
+
+def team_comb_lookup():
+    print("Not done yet")
+    return
+    team1 = input("\nTeam 1: ")
+    team2 = input("Team 2: ")
+    team3 = input("Team 3: ")
+    print("")
+    
+    print(combinations[0])
+    #for week in range(18):
+        
+        
+        #print(f"Week: {week + 1}, Ticket ID: {ticketID}, Score: {teams}")
 
 
 def create_tickets():
@@ -282,7 +319,7 @@ def test_pdf():
         print("ticket pdf made, ticket ID:", i)
     delete_past_pdf("tickets.pdf")
     print("Exporting...")
-    pdf.output('C:\\Users\\18326\PycharmProjects\\first\\tickets.pdf', 'F')
+    pdf.output('C:\\Users\\18326\\PycharmProjects\\first\\tickets.pdf', 'F')
     print("Done")
 
 
@@ -301,7 +338,7 @@ def set_points():
 
 def display_points():
     for team in allTeamStats:
-        print(str("{}: {}").format(team[0], team[1]))
+        print(f"({abc[allTeamStats.index(team)]}) {team[0]}: {team[1]}")
 
 
 def base_ticket(pdf):
