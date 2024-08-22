@@ -19,10 +19,12 @@ def mixList(listToBeMixed):
         listToBeMixed[newIndex] = temp
     return listToBeMixed
 
+
 def generateRandomTicketInfo(seed):
     random.seed(seed)
     ticketsInfo = [[]]
-    for i in range(total_players - 1):  #-1 because it already has a list element in it
+    for i in range(total_players -
+                   1):  #-1 because it already has a list element in it
         ticketsInfo.append([])
     for week in range(weeks):
         weekIDs = list(range(total_players))
@@ -51,22 +53,22 @@ week_x = 0
 
 # SETUP -------------------------------------------------------------
 # [[name, score], [name, score]]
-allTeamStats = [["Arizona Cardinals", 0], ["Atlanta Falcons", 0],
-                ["Baltimore Ravens", 0], ["Buffalo Bills", 1],
-                ["Carolina Panthers", 1], ["Chicago Bears", 1],
-                ["Cincinnati Bengals", 1], ["Cleveland Browns", 1],
-                ["Dallas Cowboys", 1], ["Denver Broncos", 1],
-                ["Detroit Lions", 1], ["Green Bay Packers", 1],
-                ["Houston Texans", 1], ["Indianapolis Colts", 1],
-                ["Jacksonville Jaguars", 1], ["Kansas City Chiefs", 1],
-                ["Las Vegas Raiders", 1], ["Los Angeles Chargers", 1],
-                ["Los Angeles Rams", 1], ["Miami Dolphins", 1],
-                ["Minnesota Vikings", 1], ["New England Patriots", 1],
-                ["New Orleans Saints", 1], ["New York Giants", 1],
-                ["New York Jets", 1], ["Philadelphia Eagles", 1],
-                ["Pittsburgh Steelers", 1], ["San Francisco 49ers", 1],
-                ["Seattle Seahawks", 1], ["Tampa Bay Buccaneers", 1],
-                ["Tennessee Titans", 1], ["Washington Football Team", 1]]
+allTeamStats = [["Arizona Cardinals", 13], ["Atlanta Falcons", 12],
+                ["Baltimore Ravens", 13], ["Buffalo Bills", 9],
+                ["Carolina Panthers", 12], ["Chicago Bears", 27],
+                ["Cincinnati Bengals", 3], ["Cleveland Browns", 12],
+                ["Dallas Cowboys", 27], ["Denver Broncos", 27],
+                ["Detroit Lions", 24], ["Green Bay Packers", 2],
+                ["Houston Texans", 28], ["Indianapolis Colts", 21],
+                ["Jacksonville Jaguars", 20], ["Kansas City Chiefs", 23],
+                ["Las Vegas Raiders", 12], ["Los Angeles Chargers", 9],
+                ["Los Angeles Rams", 13], ["Miami Dolphins", 13],
+                ["Minnesota Vikings", 27], ["New England Patriots", 13],
+                ["New Orleans Saints", 10], ["New York Giants", 10],
+                ["New York Jets", 15], ["Philadelphia Eagles", 14],
+                ["Pittsburgh Steelers", 3], ["San Francisco 49ers", 16],
+                ["Seattle Seahawks", 15], ["Tampa Bay Buccaneers", 7],
+                ["Tennessee Titans", 16], ["Washington Football Team", 6]]
 
 team_names = [
     'Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens',
@@ -90,8 +92,8 @@ abc = [
 
 commands = [
     "set_points", "weekly_winners", "test_pdf", "create_tickets",
-    "display_points", "random_points",
-    "help", "test_rotated_text", "load_randoms", "set_seed"
+    "display_points", "random_points", "help", "test_rotated_text",
+    "load_randoms", "set_seed"
 ]
 
 combinations = list(itertools.combinations(range(
@@ -154,8 +156,7 @@ def getTicketInfo(ticketID, player_scores, week):
         teams += abc[teamID] + ", "
     teams = teams[:-2]
     #+1 is because ticketID starts from 0 and the printed tickets start from 1
-    return "ticket " + str(ticketID + 1) + " has the score " + str(
-        player_scores[ticketID]) + " with the teams " + teams
+    return f"#{ticketID + 1}, Score: {player_scores[ticketID]}, Teams: {teams}"
 
 
 def weekly_winners():
@@ -237,12 +238,14 @@ def help():
             print(", ", end="")
     print()
 
+
 def save_randoms(ticketsInfo):
     with open(randomInfoFile, 'w') as file:
         for ticket in ticketsInfo:
             for number in ticket:
                 file.write(str(number) + ' ')
             file.write('\n')
+
 
 def load_randoms():
     global ticketsInfo, ticketsInfoLoaded
@@ -253,9 +256,12 @@ def load_randoms():
                 ticket = [int(item) for item in line.strip().split()]
                 ticketsInfo.append(ticket)
     except FileNotFoundError:
-        print("Random info has not been generated yet, use set_seed to generate it")
-    
+        print(
+            "Random info has not been generated yet, use set_seed to generate it"
+        )
+
     ticketsInfoLoaded = True
+
 
 def set_seed():
     seed = int(input("Seed: "))
@@ -265,7 +271,7 @@ def set_seed():
     save_randoms(ticketsInfo)
     print("Loading random info...")
     load_randoms()
-    
+
 
 def test_pdf():
     pdfs = int(input("How many (all in one pdf): "))
@@ -328,6 +334,7 @@ def delete_past_pdf(pdf):
         print("Deleting past pdf...")
         os.remove(pdf)
         print("Done")
+
 
 load_randoms()
 inp = ""
