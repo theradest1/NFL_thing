@@ -203,18 +203,28 @@ def player_info():
 
 
 def team_comb_lookup():
-    print("Not done yet")
-    return
-    team1 = input("\nTeam 1: ")
-    team2 = input("Team 2: ")
-    team3 = input("Team 3: ")
+    teamID1 = abc.index(input("\nTeam 1: "))
+    teamID2 = abc.index(input("Team 2: "))
+    teamID3 = abc.index(input("Team 3: "))
+    
+    score = allTeamStats[teamID1][1] + allTeamStats[teamID2][1] + allTeamStats[teamID3][1]
+    
     print("")
     
-    print(combinations[0])
-    #for week in range(18):
+    #get the combination ID
+    for combination in combinations:
+        if teamID1 in combination and teamID2 in combination and teamID3 in combination:
+            combinationID = combinations.index(combination)
+            pass
+    
+    #find tickets that have that combination ID
+    for week in range(18):
+        for ticketInfo in ticketsInfo:
+            if ticketInfo[week] == combinationID:
+                print(f"Week: {week + 1}, Ticket ID: {ticketsInfo.index(ticketInfo) + 1}, Score: {score}")
+                pass
         
-        
-        #print(f"Week: {week + 1}, Ticket ID: {ticketID}, Score: {teams}")
+    #print(f"Ticket ID: {ticketID}, Score: {teams}")
 
 
 def create_tickets():
