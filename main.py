@@ -37,7 +37,7 @@ def generateRandomTicketInfo(seed):
 
 total_players = 4960
 weeks = 18
-playersToShow = 10
+playersToShow = 20
 ticketsInfoLoaded = False
 
 #pdf settings
@@ -93,53 +93,27 @@ abc = [
 commands = [
     "set_points", "weekly_winners", "test_pdf", "create_tickets",
     "display_points", "random_points", "help", "test_rotated_text",
-    "load_randoms", "set_seed", "player_info", "team_comb_lookup"
+    "load_randoms", "set_seed", "player_info", "team_lookup"
 ]
 
 combinations = list(itertools.combinations(range(
     len(allTeamStats)), 3))  # generate the list of all combinations
 
 
-def topIndexes(bigList, amount):
-    topIndexeList = []
-    #setup list
-    for i in range(amount):
-        topIndexeList.append(i)
-    #find top
-    for i in range(len(bigList) - 1):
-        for j in range(len(topIndexeList)):
-            if bigList[i] > bigList[
-                    topIndexeList[j]] and not i in topIndexeList:
-                topIndexeList[j] = i
+def getIndexes(playerScores, amount, top = True):
+    #create a list that has pairs: [index (ticket ID), score]
+    indexedNumbers = list(enumerate(playerScores))
+    
+    #sort the pairs based on the score
+    indexedNumbers = sorted(indexedNumbers, key=lambda pair: pair[1], reverse=top)
 
-    #adding score duplicates
-    for i in range(len(bigList) - 1):
-        for j in range(len(topIndexeList)):
-            if bigList[i] == bigList[
-                    topIndexeList[j]] and not i in topIndexeList:
-                topIndexeList.insert(j, i)
-    return topIndexeList
-
-
-def bottomIndexes(bigList, amount):
-    bottomIndexeList = []
-    #setup list
-    for i in range(amount):
-        bottomIndexeList.append(i)
-    #find top
-    for i in range(len(bigList) - 1):
-        for j in range(len(bottomIndexeList)):
-            if bigList[i] < bigList[
-                    bottomIndexeList[j]] and not i in bottomIndexeList:
-                bottomIndexeList[j] = i
-
-    #adding score duplicates
-    for i in range(len(bigList) - 1):
-        for j in range(len(bottomIndexeList)):
-            if bigList[i] == bigList[
-                    bottomIndexeList[j]] and not i in bottomIndexeList:
-                bottomIndexeList.insert(j, i)
-    return bottomIndexeList
+    #reduce down to how much you want to display
+    indexedNumbers = indexedNumbers[:amount]
+    
+    #get only the index
+    topIndexesList = [pair[0] for pair in indexedNumbers]
+    
+    return topIndexesList
 
 
 def getAstheticNumbers(num, digits):
@@ -168,8 +142,8 @@ def weekly_winners():
             score += allTeamStats[team][1]  #1 because that is the index of the score of that team
         player_scores.append(score)
 
-    winners = topIndexes(player_scores, playersToShow)
-    losers = bottomIndexes(player_scores, playersToShow)
+    winners = getIndexes(player_scores, playersToShow)
+    losers = getIndexes(player_scores, playersToShow, False)
     
     print("\nHighest scores:")
     i = 1
@@ -202,26 +176,25 @@ def player_info():
         print(f"Week: {week + 1}, Score: {score}, Teams: {teams}")
 
 
-def team_comb_lookup():
+def team_lookup():
     teamID1 = abc.index(input("\nTeam 1: "))
     teamID2 = abc.index(input("Team 2: "))
     teamID3 = abc.index(input("Team 3: "))
-    
-    score = allTeamStats[teamID1][1] + allTeamStats[teamID2][1] + allTeamStats[teamID3][1]
-    
-    print("")
     
     #get the combination ID
     for combination in combinations:
         if teamID1 in combination and teamID2 in combination and teamID3 in combination:
             combinationID = combinations.index(combination)
             pass
+        
+    score = allTeamStats[teamID1][1] + allTeamStats[teamID2][1] + allTeamStats[teamID3][1]
+    print(f"\nScore: {score}\n")
     
     #find tickets that have that combination ID
     for week in range(18):
         for ticketInfo in ticketsInfo:
             if ticketInfo[week] == combinationID:
-                print(f"Week: {week + 1}, Ticket ID: {ticketsInfo.index(ticketInfo) + 1}, Score: {score}")
+                print(f"Week {week + 1}: Ticket ID: {ticketsInfo.index(ticketInfo) + 1}")
                 pass
         
     #print(f"Ticket ID: {ticketID}, Score: {teams}")
